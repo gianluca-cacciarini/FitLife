@@ -7,18 +7,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
 
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
     private Button logout2;
+
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
 
         gsc = GoogleSignIn.getClient(this, gso);
+        firebaseAuth = FirebaseAuth.getInstance();
         
         logout2 = findViewById(R.id.logout2);
 
@@ -49,8 +54,15 @@ public class HomeActivity extends AppCompatActivity {
         gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), StartActivity.class));
+                if (task.isSuccessful()) {
+                    // When task is successful
+                    // Sign out from firebase
+                    firebaseAuth.signOut();
+
+                    // Display Toast
+                    Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(HomeActivity.this, StartActivity.class));
+                }
             }
         });
     }

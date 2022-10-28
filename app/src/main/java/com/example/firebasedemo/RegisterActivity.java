@@ -42,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
                     Toast.makeText(RegisterActivity.this, "Empty credentials!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(RegisterActivity.this , MainActivity.class));
+                    startActivity(new Intent(RegisterActivity.this , RegisterActivity.class));
                     finish();
                 } else if (txt_password.length() < 6){
                     Toast.makeText(RegisterActivity.this, "Password too short!", Toast.LENGTH_SHORT).show();
@@ -59,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "Registering user successful!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(RegisterActivity.this , MainActivity.class));
                 } else {
                     Toast.makeText(RegisterActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
                 }

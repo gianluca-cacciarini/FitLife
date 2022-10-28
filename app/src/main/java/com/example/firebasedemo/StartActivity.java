@@ -1,5 +1,6 @@
 package com.example.firebasedemo;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +16,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -27,6 +34,8 @@ public class StartActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
 
+    private FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +46,7 @@ public class StartActivity extends AppCompatActivity {
         google_img=findViewById(R.id.google);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("333832431832-gmajdqe6922lfmo44q90anipp982njgb.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -64,6 +74,17 @@ public class StartActivity extends AppCompatActivity {
                 finish();
             }
         });
+        // Initialize firebase auth
+        firebaseAuth=FirebaseAuth.getInstance();
+        // Initialize firebase user
+        FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
+        if(firebaseUser!=null)
+        {
+            // When user already sign in
+            // redirect to profile activity
+            startActivity(new Intent(StartActivity.this,MainActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
     }
 
     private void SignIn() {
@@ -78,9 +99,21 @@ public class StartActivity extends AppCompatActivity {
 
         if(requestCode==100){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            if(task.isSuccessful()) {
+                Toast.makeText(this, "Log in successful!", Toast.LENGTH_SHORT).show();
+            }
             try {
-                task.getResult(ApiException.class);
-                HomeActivity();
+                GoogleSignInAccount googleSignInAccount = task.getResult(ApiException.class);
+                if(googleSignInAccount!=null) {
+                    // When sign in account is not equal to null
+                    // Initialize auth credential
+                    AuthCredential authCredential = GoogleAuthProvider
+                            .getCredential(googleSignInAccount.getIdToken()
+                                    , null);
+                    // Check credential
+                    firebaseAuth.signInWithCredential(authCredential);
+                    HomeActivity();
+                }
             } catch (ApiException e) {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
