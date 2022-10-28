@@ -31,26 +31,31 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button logout;
-    private EditText edit;
-    private Button add;
-    private ListView listView;
+    DatabaseReference mDatabaseReference;
+    FirebaseAuth mFirebaseAuth;
+
+    Button logout;
+    EditText edit;
+    Button add;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
+        mFirebaseAuth = FirebaseAuth.getInstance();
+
         logout = findViewById(R.id.logout);
         edit = findViewById(R.id.edit);
         add = findViewById(R.id.add);
         listView = findViewById(R.id.listView);
 
-        MyAppUser user = new MyAppUser();
-        user.setName("Paolo");
-        user.setCalorie("1000kcal");
-        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-        mDatabaseReference.child("my_app_user").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(MainActivity.this, new OnCompleteListener<Void>() {
+        User user = new User();
+        user.setName("paolo");
+        user.setCal_goal(1000);
+        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(MainActivity.this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){

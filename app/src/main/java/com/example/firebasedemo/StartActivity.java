@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -107,15 +108,14 @@ public class StartActivity extends AppCompatActivity {
                 if(googleSignInAccount!=null) {
                     // When sign in account is not equal to null
                     // Initialize auth credential
-                    AuthCredential authCredential = GoogleAuthProvider
-                            .getCredential(googleSignInAccount.getIdToken()
-                                    , null);
+                    AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
                     // Check credential
                     firebaseAuth.signInWithCredential(authCredential);
                     HomeActivity();
                 }
             } catch (ApiException e) {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                Log.d("myapp",e.toString());
             }
         }
     }
