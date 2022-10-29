@@ -52,10 +52,7 @@ public class MainActivity extends AppCompatActivity {
         add = findViewById(R.id.add);
         listView = findViewById(R.id.listView);
 
-        User user = new User();
-        user.setName("paolo");
-        user.setCal_goal(1000);
-        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(MainActivity.this, new OnCompleteListener<Void>() {
+        /*mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(MainActivity.this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
@@ -64,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "failed!", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
 
         logout.setOnClickListener(new View.OnClickListener() {
