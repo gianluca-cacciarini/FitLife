@@ -125,11 +125,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //function that check if the user is a google user or a default user in order to signout him/her
     public void signOut(){
+        //we get the user values
         mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Toast.makeText(getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                 String user_json = snapshot.getValue().toString();
                 Gson gson = new Gson();
                 Type type = new TypeToken<User>() {}.getType();
@@ -145,12 +147,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //signout if the user is not a google user
     private void DefaultSignOut(){
         FirebaseAuth.getInstance().signOut();
         Toast.makeText(MainActivity.this, "Logged Out!", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(getApplicationContext(), StartActivity.class));
     }
 
+    //signout for the google users
     private void GoogleSignOut() {
         gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
