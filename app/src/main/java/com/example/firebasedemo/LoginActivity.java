@@ -35,6 +35,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String txt_email = email.getText().toString();
                 String txt_password = password.getText().toString();
+                if (txt_email.equals("") || txt_password.equals("")){
+                    Toast.makeText(LoginActivity.this, "empty values", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 loginUser(txt_email, txt_password);
             }
         });
@@ -46,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(AuthResult authResult) {
                 Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
             }
         });
 

@@ -79,8 +79,7 @@ public class StartActivity extends AppCompatActivity {
         firebaseAuth=FirebaseAuth.getInstance();
         // Initialize firebase user
         FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
-        if(firebaseUser!=null)
-        {
+        if(firebaseUser!=null) {
             // When user already sign in
             // redirect to profile activity
             startActivity(new Intent(StartActivity.this,MainActivity.class)
@@ -121,8 +120,6 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void HomeActivity() {
-
-        finish();
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
     }
