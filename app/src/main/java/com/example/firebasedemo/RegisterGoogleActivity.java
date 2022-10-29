@@ -16,12 +16,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Register2Activity extends AppCompatActivity {
+public class RegisterGoogleActivity extends AppCompatActivity {
 
     private Button done;
     private EditText carb_goal, fat_goal, prot_goal, cal_goal, height, weight;
@@ -37,7 +36,7 @@ public class Register2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register2);
+        setContentView(R.layout.activity_register_google);
 
         done = findViewById(R.id.done);
         male = findViewById(R.id.male);
@@ -50,6 +49,7 @@ public class Register2Activity extends AppCompatActivity {
         weight = findViewById(R.id.weight);
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
+
         loadData();
 
         male.setOnClickListener(new View.OnClickListener() {
@@ -82,11 +82,11 @@ public class Register2Activity extends AppCompatActivity {
                 String weight_str = weight.getText().toString();
 
                 if (carb_str.equals("") || fat_str.equals("") || cal_str.equals("") || prot_str.equals("") || gender == -1) {
-                    Toast.makeText(Register2Activity.this, "Empty credentials!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Empty credentials!", Toast.LENGTH_SHORT).show();
                 } else {
                     user = new User();
-                    //user.setName(mFirebaseAuth.getCurrentUser().getEmail());
-                    user.setPassword("default_user");
+                    user.setName(mFirebaseAuth.getCurrentUser().getEmail());
+                    user.setPassword("google_user");
                     user.setCal_goal(parseInt(cal_str));
                     user.setCarb_goal(parseInt(carb_str));
                     user.setFat_goal(parseInt(fat_str));
@@ -95,30 +95,16 @@ public class Register2Activity extends AppCompatActivity {
                     user.setWeight(parseInt(weight_str));
                     // gender = 1 if male OR gender = 0 if female
                     user.setSex(gender);
-                    registerUser(txt_email, txt_password);
-
-                }
-            }
-        });
-    }
-
-    private void registerUser(String email, String password) {
-        mFirebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(Register2Activity.this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(Register2Activity.this, "Registering user successful!", Toast.LENGTH_SHORT).show();
-                    user.setName(mFirebaseAuth.getCurrentUser().getEmail());
                     insertUser();
-                } else {
-                    Toast.makeText(Register2Activity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
+
     }
 
     private void insertUser() {
-        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(Register2Activity.this, new OnCompleteListener<Void>() {
+        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener( RegisterGoogleActivity.this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
