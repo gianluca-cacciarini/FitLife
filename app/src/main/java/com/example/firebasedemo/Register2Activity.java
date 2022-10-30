@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -41,8 +42,6 @@ public class Register2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_register2);
 
         done = findViewById(R.id.done);
-        male = findViewById(R.id.male);
-        female = findViewById(R.id.female);
         carb_goal = findViewById(R.id.carbo_goal);
         fat_goal = findViewById(R.id.fat_goal);
         cal_goal = findViewById(R.id.cal_goal);
@@ -52,24 +51,6 @@ public class Register2Activity extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
         loadData();
-
-        male.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                male.setChecked(true);
-                female.setChecked(false);
-                gender = 1;
-            }
-        });
-
-        female.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                male.setChecked(false);
-                female.setChecked(true);
-                gender = 0;
-            }
-        });
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,12 +63,13 @@ public class Register2Activity extends AppCompatActivity {
                 String height_str = height.getText().toString();
                 String weight_str = weight.getText().toString();
 
-                if (carb_str.equals("") || fat_str.equals("") || cal_str.equals("") || prot_str.equals("") || gender == -1) {
+                if (TextUtils.isEmpty(carb_str) || TextUtils.isEmpty(fat_str) || TextUtils.isEmpty(cal_str) || TextUtils.isEmpty(prot_str) || gender == -1) {
                     Toast.makeText(Register2Activity.this, "Empty credentials!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Register2Activity.this, Register2Activity.class));
+                    finish();
                 } else {
                     user = new User();
                     //user.setName(mFirebaseAuth.getCurrentUser().getEmail());
-                    user.setPassword("default_user");
                     user.setCal_goal(parseInt(cal_str));
                     user.setCarb_goal(parseInt(carb_str));
                     user.setFat_goal(parseInt(fat_str));
@@ -102,6 +84,27 @@ public class Register2Activity extends AppCompatActivity {
             }
         });
     }
+    public void onCheckboxClicked(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        switch(view.getId()) {
+            case R.id.male:
+                if (checked) gender = 1;
+                // Put some meat on the sandwich
+            else
+                // Remove the meat
+                break;
+            case R.id.female:male:
+                if (checked) gender = 0;
+                // Cheese me
+            else
+                gender = -1;
+                break;
+            // TODO: Veggie sandwich
+        }
+    }
 
     private void registerUser(String email, String password) {
         mFirebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(Register2Activity.this, new OnCompleteListener<AuthResult>() {
@@ -110,7 +113,8 @@ public class Register2Activity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(Register2Activity.this, "Registering user successful!", Toast.LENGTH_SHORT).show();
                     user.setName(mFirebaseAuth.getCurrentUser().getEmail());
-                    insertUser();
+                    insertData();
+                    startActivity(new Intent(Register2Activity.this, MainActivity.class));
                 } else {
                     Toast.makeText(Register2Activity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
                 }
@@ -118,21 +122,22 @@ public class Register2Activity extends AppCompatActivity {
         });
     }
 
-    private void insertUser() {
+    private void insertData() {
         mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(Register2Activity.this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Database updated!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext() , MainActivity.class));
+                    Toast.makeText(Register2Activity.this, "Database updated!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Register2Activity.this , MainActivity.class));
                 } else {
-                    Toast.makeText(getApplicationContext(), "failed to update the database!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register2Activity.this, "failed to update the database!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     public void saveData(){
+        //
         SharedPreferences sharedPreferences = getSharedPreferences("ALL_ACTIVITY", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("EMAIL", txt_email);

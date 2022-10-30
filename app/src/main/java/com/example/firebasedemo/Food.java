@@ -1,8 +1,6 @@
 package com.example.firebasedemo;
 
 
-import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -14,7 +12,6 @@ public class Food {
     public int prot;
     public int fat;
     public int cal;
-    public Uri image_url;
 
     public Food() {
         super();
@@ -26,7 +23,7 @@ public class Food {
         this.cal = 0;
     }
 
-    public Food(String name, String category, int carb, int prot, int fat, int cal, Uri url){
+    public Food(String name, String category, int carb, int prot, int fat, int cal){
         super();
         this.name = name;
         this.category = category;
@@ -34,7 +31,6 @@ public class Food {
         this.prot = prot;
         this.fat = fat;
         this.cal = cal;
-        this.image_url = url;
     }
 
     @Override
@@ -108,7 +104,4 @@ public class Food {
         this.cal = cal;
     }
 
-    public Uri getImage_url() {return image_url;}
-
-    public void setImage_url(Uri image_url) {this.image_url = image_url;}
 }

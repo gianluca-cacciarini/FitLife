@@ -13,44 +13,36 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DatabaseReference mDatabaseReference;
-    private FirebaseAuth mFirebaseAuth;
+    DatabaseReference mDatabaseReference;
+    FirebaseAuth mFirebaseAuth;
 
-    private Button logout, add;
-    private EditText edit;
-    private ListView listView;
-
-    private GoogleSignInOptions gso;
-    private GoogleSignInClient gsc;
+    Button logout;
+    EditText edit;
+    Button add;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        gsc = GoogleSignIn.getClient(this, gso);
 
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -75,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signOut();
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(MainActivity.this, "Logged Out!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, StartActivity.class));
             }
         });
 
@@ -123,52 +117,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    //function that check if the user is a google user or a default user in order to signout him/her
-    public void signOut(){
-        //we get the user values
-        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //Toast.makeText(getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
-                String user_json = snapshot.getValue().toString();
-                Gson gson = new Gson();
-                Type type = new TypeToken<User>() {}.getType();
-                User current_user = gson.fromJson(user_json,type);
-                if (current_user.password.equals("google_user")) GoogleSignOut();
-                if (current_user.password.equals("default_user")) DefaultSignOut();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    //signout if the user is not a google user
-    private void DefaultSignOut(){
-        FirebaseAuth.getInstance().signOut();
-        Toast.makeText(MainActivity.this, "Logged Out!", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(getApplicationContext(), StartActivity.class));
-    }
-
-    //signout for the google users
-    private void GoogleSignOut() {
-        gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    // When task is successful
-                    // Sign out from firebase
-                    mFirebaseAuth.signOut();
-
-                    // Display Toast
-                    Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), StartActivity.class));
-                }
-            }
-        });
     }
 }
