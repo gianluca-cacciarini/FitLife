@@ -4,14 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -33,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
+    private StorageReference mStorageReference;
+
+    private User user;
 
     private Button logout, add;
     private EditText edit;
@@ -40,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
+
+    private ImageView image;
+    private Uri image_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +63,12 @@ public class MainActivity extends AppCompatActivity {
 
         gsc = GoogleSignIn.getClient(this, gso);
 
+        mStorageReference = FirebaseStorage.getInstance().getReference().child("images");
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+        image = findViewById(R.id.imageView);
+        getImage();
 
         logout = findViewById(R.id.logout);
         edit = findViewById(R.id.edit);
@@ -123,6 +138,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getImage(){
+        mStorageReference.child("apples.jpg").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                image_url = task.getResult();
+                Glide.with(getApplicationContext()).load(image_url).into(image);
+                getUser();
+            }
+        });
+    }
+
+    public void getUser(){
+        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                DataSnapshot snapshot = task.getResult();
+                String user_json = snapshot.getValue().toString();
+                Gson gson = new Gson();
+                Type type = new TypeToken<User>() {}.getType();
+                user = gson.fromJson(user_json,type);
+                Food f = new Food();
+                f.name = "test";
+                f.image_url = image_url.toString();
+                user.addFood(f);
+                mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
+            }
+        });
     }
 
     //function that check if the user is a google user or a default user in order to signout him/her
