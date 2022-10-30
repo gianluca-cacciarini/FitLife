@@ -25,12 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class Register2Activity extends AppCompatActivity {
 
     private Button done;
-    private EditText carb_goal;
-    private EditText fat_goal;
-    private EditText prot_goal;
-    private EditText cal_goal;
-    private EditText height;
-    private EditText weight;
+    private EditText carb_goal, weight, fat_goal, prot_goal, cal_goal, height;
     private int gender = -1;
     String txt_email;
     String txt_password;

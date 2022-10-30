@@ -44,21 +44,7 @@ public class StartActivity extends AppCompatActivity {
 
         register = findViewById(R.id.register);
         login = findViewById(R.id.login);
-        google_img=findViewById(R.id.google);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("333832431832-gmajdqe6922lfmo44q90anipp982njgb.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-
-        gsc = GoogleSignIn.getClient(this, gso);
-
-        google_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SignIn();
-            }
-        });
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
