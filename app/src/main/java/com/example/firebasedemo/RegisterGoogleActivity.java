@@ -95,14 +95,8 @@ public class RegisterGoogleActivity extends AppCompatActivity {
                     user.setWeight(parseInt(weight_str));
                     // gender = 1 if male OR gender = 0 if female
                     user.setSex(gender);
-                    Food f = new Food();
-                    f.name = "apple";
-                    f.cal = 100;
-                    f.carb = 90;
-                    f.fat = 80;
-                    f.prot = 70;
-                    user.addFood(f);
                     insertUser();
+
                 }
             }
         });

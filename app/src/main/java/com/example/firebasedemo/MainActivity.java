@@ -4,23 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,8 +23,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -40,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
-    private StorageReference mStorageReference;
 
     private Button logout, add;
     private EditText edit;
@@ -48,10 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
-
-    private ImageView image;
-    private Uri image_url;
-    private User current_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,20 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
         gsc = GoogleSignIn.getClient(this, gso);
 
-        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/");
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
-
 
         logout = findViewById(R.id.logout);
         edit = findViewById(R.id.edit);
         add = findViewById(R.id.add);
         listView = findViewById(R.id.listView);
-
-        Log.d("debug", "onCreate");
-        image = findViewById(R.id.imageView);
-        getUser();
-        //caricaImg();
 
         /*mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(MainActivity.this, new OnCompleteListener<Void>() {
             @Override
@@ -119,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         //FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Languages").child("n3").setValue("Flutter");
         //FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Languages").child("n4").setValue("React Native");
 
-        /*
         ArrayList<String> list = new ArrayList<>();
         ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_item, list);
         listView.setAdapter(adapter);
@@ -143,44 +123,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-         */
-
     }
-
-    public void getUser(){
-        Log.d("debug", "getUser");
-        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                DataSnapshot snap = task.getResult();
-                String user_json = snap.getValue().toString();
-                Gson gson = new Gson();
-                Type type = new TypeToken<User>() {}.getType();
-                current_user = gson.fromJson(user_json,type);
-                caricaImg();
-            }
-        });
-
-    }
-    
-    public void caricaImg(){
-        Log.d("debug", "caricaImg");
-        mStorageReference.child("apples.jpg").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                image_url=task.getResult();
-                Glide.with(getApplicationContext()).load(image_url).into(image);
-                Food f = new Food();
-                f.name = "test";
-                f.image_url = image_url.toString();
-                current_user.addFood(f);
-                mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(current_user);
-            }
-        });
-    }
-
-
-
 
     //function that check if the user is a google user or a default user in order to signout him/her
     public void signOut(){
