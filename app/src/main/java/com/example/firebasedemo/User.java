@@ -25,6 +25,20 @@ public class User {
     public HashMap<String,Day> diary;
 
 
+    public void addFood(Food food){
+        if (this.food_list == null){
+            this.food_list = new HashMap<String,Food>();
+        }
+        this.food_list.put(food.name,food);
+    }
+
+    public Food getFood(Food food){
+        if (this.food_list == null){
+            return null;
+        }
+        return this.food_list.get(food.name);
+    }
+
     public User() {
         super();
         name = "dummy";
@@ -104,13 +118,6 @@ public class User {
             res += diary.get(key).toString();
         }
         return res;
-    }
-
-    public void addFood(Food new_food){
-        if (this.food_list == null){
-            this.food_list = new HashMap<String,Food>();
-        }
-        this.food_list.put(new_food.name,new_food);
     }
 
     public String getName() {
