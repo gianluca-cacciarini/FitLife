@@ -29,6 +29,7 @@ public class Register2Activity extends AppCompatActivity {
     String txt_email;
     String txt_password;
     User user;
+    
     private CheckBox male, female;
 
     private DatabaseReference mDatabaseReference;
