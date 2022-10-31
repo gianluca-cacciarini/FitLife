@@ -97,19 +97,13 @@ public class StartActivity extends AppCompatActivity {
                     AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
                     // Check credential
                     firebaseAuth.signInWithCredential(authCredential);
-                    HomeActivity();
+                    //TODO ordine signin insert data
+                    startActivity( new Intent(getApplicationContext(),Register2Activity.class));
                 }
             } catch (ApiException e) {
                 Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
                 Log.d("myapp",e.toString());
             }
         }
-    }
-
-    private void HomeActivity() {
-
-        finish();
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(intent);
     }
 }

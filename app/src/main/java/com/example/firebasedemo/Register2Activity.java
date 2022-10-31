@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,7 +28,7 @@ public class Register2Activity extends AppCompatActivity {
     private Button done;
     private EditText carb_goal, weight, fat_goal, prot_goal, cal_goal, height;
     private int gender = -1;
-    String txt_email;
+    private String txt_email;
     String txt_password;
     User user;
     
@@ -51,6 +52,27 @@ public class Register2Activity extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
         loadData();
+
+        male = findViewById(R.id.male);
+        female = findViewById(R.id.female);
+        male.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                male.setChecked(true);
+                female.setChecked(false);
+                gender = 1;
+            }
+        });
+
+        female.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                male.setChecked(false);
+                female.setChecked(true);
+                gender = 0;
+            }
+        });
+
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,32 +100,16 @@ public class Register2Activity extends AppCompatActivity {
                     user.setWeight(parseInt(weight_str));
                     // gender = 1 if male OR gender = 0 if female
                     user.setSex(gender);
-                    registerUser(txt_email, txt_password);
+                    if (mFirebaseAuth.getCurrentUser()!=null){
+                        insertData();
+                    }
+                    else{
+                        registerUser(txt_email, txt_password);
+                    }
 
                 }
             }
         });
-    }
-    public void onCheckboxClicked(View view) {
-        // Is the view now checked?
-        boolean checked = ((CheckBox) view).isChecked();
-
-        // Check which checkbox was clicked
-        switch(view.getId()) {
-            case R.id.male:
-                if (checked) gender = 1;
-                // Put some meat on the sandwich
-            else
-                // Remove the meat
-                break;
-            case R.id.female:male:
-                if (checked) gender = 0;
-                // Cheese me
-            else
-                gender = -1;
-                break;
-            // TODO: Veggie sandwich
-        }
     }
 
     private void registerUser(String email, String password) {

@@ -1,5 +1,6 @@
 package com.example.firebasedemo;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,12 +19,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,6 +42,9 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
 
+    private DatabaseReference mDatabaseReference;
+    private FirebaseAuth mFirebaseAuth;
+
     private FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         login_button = findViewById(R.id.login);
         google_img = findViewById(R.id.google_btn);
+
+        mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("333832431832-gmajdqe6922lfmo44q90anipp982njgb.apps.googleusercontent.com")
@@ -98,8 +111,12 @@ public class LoginActivity extends AppCompatActivity {
                     // Initialize auth credential
                     AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
                     // Check credential
-                    auth.signInWithCredential(authCredential);
-                    HomeActivity();
+                    auth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            checkUserInDB();
+                        }
+                    });
                 }
             } catch (ApiException e) {
                 Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
@@ -108,11 +125,23 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void HomeActivity() {
+    private void checkUserInDB(){
+        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                }
+                else{
+                    startActivity(new Intent(getApplicationContext(),Register2Activity.class));
+                }
+            }
 
-        finish();
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(intent);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void loginUser(String email, String password) {

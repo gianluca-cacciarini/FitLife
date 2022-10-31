@@ -34,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
     private StorageReference mStorageReference;
+
+    private GoogleSignInOptions gso;
+    private GoogleSignInClient gsc;
 
     private User user;
 
@@ -93,9 +97,7 @@ public class MainActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Toast.makeText(MainActivity.this, "Logged Out!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, StartActivity.class));
+                signOut();
             }
         });
 
