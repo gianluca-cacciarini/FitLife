@@ -1,23 +1,39 @@
 package com.example.firebasedemo;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
-    private Button login;
+    private Button login_button;
+    private LinearLayout google_img;
+
+    private GoogleSignInOptions gso;
+    private GoogleSignInClient gsc;
 
     private FirebaseAuth auth;
     @Override
@@ -27,21 +43,76 @@ public class LoginActivity extends AppCompatActivity {
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
-        login = findViewById(R.id.login);
+        login_button = findViewById(R.id.login);
+        google_img = findViewById(R.id.google_btn);
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("333832431832-gmajdqe6922lfmo44q90anipp982njgb.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
+        gsc = GoogleSignIn.getClient(this, gso);
+
+        google_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SignIn();
+            }
+        });
 
         auth = FirebaseAuth.getInstance();
-        login.setOnClickListener(new View.OnClickListener() {
+        login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String txt_email = email.getText().toString();
                 String txt_password = password.getText().toString();
-                if (txt_email.equals("") || txt_password.equals("")){
-                    Toast.makeText(LoginActivity.this, "empty values", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                loginUser(txt_email, txt_password);
+                if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
+                    Toast.makeText(LoginActivity.this, "Empty credentials!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(LoginActivity.this , LoginActivity.class));
+                    finish();
+                } else loginUser(txt_email, txt_password);
             }
         });
+
+    }
+
+    private void SignIn() {
+
+        Intent intent = gsc.getSignInIntent();
+        startActivityForResult(intent, 100);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==100){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            if(task.isSuccessful()) {
+                Toast.makeText(this, "Log in successful!", Toast.LENGTH_SHORT).show();
+            }
+            try {
+                GoogleSignInAccount googleSignInAccount = task.getResult(ApiException.class);
+                if(googleSignInAccount!=null) {
+                    // When sign in account is not equal to null
+                    // Initialize auth credential
+                    AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
+                    // Check credential
+                    auth.signInWithCredential(authCredential);
+                    HomeActivity();
+                }
+            } catch (ApiException e) {
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                Log.d("myapp",e.toString());
+            }
+        }
+    }
+
+    private void HomeActivity() {
+
+        finish();
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(intent);
     }
 
     private void loginUser(String email, String password) {
@@ -50,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(AuthResult authResult) {
                 Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
             }
         });
 

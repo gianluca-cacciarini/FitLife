@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,50 +24,27 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class StartActivity extends AppCompatActivity {
 
-    private Button register, login;
+    private Button register;
+    private Button login;
+
     private ImageView google_img;
 
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
 
-    private FirebaseAuth mfirebaseAuth;
-    private DatabaseReference mDatabaseReference;
-
-    private String txt_email, txt_password;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
-        mfirebaseAuth =FirebaseAuth.getInstance();
-
         register = findViewById(R.id.register);
         login = findViewById(R.id.login);
-        google_img=findViewById(R.id.google);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("333832431832-gmajdqe6922lfmo44q90anipp982njgb.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-
-        gsc = GoogleSignIn.getClient(this, gso);
-
-        google_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SignIn();
-            }
-        });
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,10 +61,16 @@ public class StartActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        FirebaseUser firebaseUser= mfirebaseAuth.getCurrentUser();
-        if(firebaseUser!=null) {
-            startActivity(new Intent(StartActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        // Initialize firebase auth
+        firebaseAuth=FirebaseAuth.getInstance();
+        // Initialize firebase user
+        FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
+        if(firebaseUser!=null)
+        {
+            // When user already sign in
+            // redirect to profile activity
+            startActivity(new Intent(StartActivity.this,MainActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
 
@@ -113,19 +95,9 @@ public class StartActivity extends AppCompatActivity {
                     // When sign in account is not equal to null
                     // Initialize auth credential
                     AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
-                    //now i need to check if the user exist in my database, because if he/she its not present i need to add him/her
-                    //so i try to get their values
-                    mfirebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            txt_email = mfirebaseAuth.getCurrentUser().getEmail();
-                            txt_password = "google_account";
-                            saveData();
-                            checkUser();
-                        }
-                    });
-
-                    //HomeActivity();
+                    // Check credential
+                    firebaseAuth.signInWithCredential(authCredential);
+                    HomeActivity();
                 }
             } catch (ApiException e) {
                 Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
@@ -134,42 +106,9 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    private void checkUser() {
-        mDatabaseReference.child(mfirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //if snapshot exist then it means that he/she is already in the database
-                if (snapshot.exists()){
-                    startActivity( new Intent(getApplicationContext(),MainActivity.class));
-                }
-                //then this mean he/she is not already in the database so we need to get the info and the add
-                else{
-                    startActivity( new Intent(getApplicationContext(), RegisterGoogleActivity.class));
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-
-    public void saveData(){
-        SharedPreferences sharedPreferences = getSharedPreferences("ALL_ACTIVITY", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("EMAIL", txt_email);
-        editor.putString("PASS", txt_password);
-        editor.apply();
-    }
-
-    public void loadData(){
-        SharedPreferences sharedPreferences = getSharedPreferences("ALL_ACTIVITY", MODE_PRIVATE);
-        txt_email = sharedPreferences.getString("EMAIL", "none");
-        txt_password = sharedPreferences.getString("PASS", "none");
-    }
-
     private void HomeActivity() {
+
+        finish();
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
     }
