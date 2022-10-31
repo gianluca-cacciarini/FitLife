@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -166,10 +168,11 @@ public class MainActivity extends AppCompatActivity {
                 String user_json = snapshot.getValue().toString();
                 Gson gson = new Gson();
                 Type type = new TypeToken<User>() {}.getType();
+                Log.d("debug",user_json);
                 user = gson.fromJson(user_json,type);
                 Food f = new Food();
                 f.name = "test";
-                f.image_url = image_url.toString();
+                //f.image_url = image_url.toString();
                 user.addFood(f);
                 mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
             }
@@ -187,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 Type type = new TypeToken<User>() {}.getType();
                 User current_user = gson.fromJson(user_json,type);
+                Toast.makeText(MainActivity.this, current_user.password, Toast.LENGTH_SHORT).show();
                 if (current_user.password.equals("google_user")) GoogleSignOut();
                 if (current_user.password.equals("default_user")) DefaultSignOut();
             }

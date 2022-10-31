@@ -24,7 +24,7 @@ public class Food {
         this.cal = 0;
     }
 
-    public Food(String name, String category, int carb, int prot, int fat, int cal, String url){
+    public Food(String name, String category, int carb, int prot, int fat, int cal){
         super();
         this.name = name;
         this.category = category;

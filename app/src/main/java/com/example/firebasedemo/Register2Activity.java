@@ -92,6 +92,7 @@ public class Register2Activity extends AppCompatActivity {
                 } else {
                     user = new User();
                     //user.setName(mFirebaseAuth.getCurrentUser().getEmail());
+                    user.setPassword("google_user");
                     user.setCal_goal(parseInt(cal_str));
                     user.setCarb_goal(parseInt(carb_str));
                     user.setFat_goal(parseInt(fat_str));
@@ -119,6 +120,7 @@ public class Register2Activity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(Register2Activity.this, "Registering user successful!", Toast.LENGTH_SHORT).show();
                     user.setName(mFirebaseAuth.getCurrentUser().getEmail());
+                    user.setPassword("default_user");
                     insertData();
                     startActivity(new Intent(Register2Activity.this, MainActivity.class));
                 } else {
