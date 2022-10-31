@@ -12,6 +12,7 @@ public class Food {
     public int prot;
     public int fat;
     public int cal;
+    public String image_url;
 
     public Food() {
         super();
@@ -23,7 +24,7 @@ public class Food {
         this.cal = 0;
     }
 
-    public Food(String name, String category, int carb, int prot, int fat, int cal){
+    public Food(String name, String category, int carb, int prot, int fat, int cal, String url){
         super();
         this.name = name;
         this.category = category;
@@ -103,5 +104,7 @@ public class Food {
     public void setCal(int cal) {
         this.cal = cal;
     }
+    public String getImage_url() {return image_url;}
 
+    public void setImage_url(String image_url) {this.image_url = image_url;}
 }
