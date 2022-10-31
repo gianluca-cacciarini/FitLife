@@ -41,11 +41,12 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        Log.d("debug","StartActivity");
 
         register = findViewById(R.id.register);
         login = findViewById(R.id.login);
 
-
+        Log.d("debug","StartActivity 1");
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,6 +55,7 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
+        Log.d("debug","StartActivity 2");
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,17 +63,21 @@ public class StartActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Log.d("debug","StartActivity 3");
         // Initialize firebase auth
         firebaseAuth=FirebaseAuth.getInstance();
         // Initialize firebase user
+
+        Log.d("debug","StartActivity 4");
         FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
-        if(firebaseUser!=null)
-        {
+        if(firebaseUser!=null) {
             // When user already sign in
             // redirect to profile activity
-            startActivity(new Intent(StartActivity.this,MainActivity.class)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            Log.d("debug","StartActivity 5");
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
         }
+        Log.d("debug","StartActivity 6");
     }
 
     private void SignIn() {
@@ -98,6 +104,7 @@ public class StartActivity extends AppCompatActivity {
                     // Check credential
                     firebaseAuth.signInWithCredential(authCredential);
                     //TODO ordine signin insert data
+                    Log.d("debug","StartActivity 7");
                     startActivity( new Intent(getApplicationContext(),Register2Activity.class));
                 }
             } catch (ApiException e) {

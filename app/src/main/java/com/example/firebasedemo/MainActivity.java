@@ -17,12 +17,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,9 +34,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d("debug","MainActivity");
 
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -99,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Log.d("debug","MainActivity 1");
                 signOut();
             }
         });
@@ -165,14 +165,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot snapshot = task.getResult();
-                String user_json = snapshot.getValue().toString();
-                Gson gson = new Gson();
-                Type type = new TypeToken<User>() {}.getType();
-                Log.d("debug",user_json);
-                user = gson.fromJson(user_json,type);
+                user = snapshot.getValue(User.class);
                 Food f = new Food();
-                f.name = "test";
-                //f.image_url = image_url.toString();
+                f.imageurl = image_url.toString();
                 user.addFood(f);
                 mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
             }
@@ -182,17 +177,23 @@ public class MainActivity extends AppCompatActivity {
     //function that check if the user is a google user or a default user in order to signout him/her
     public void signOut(){
         //we get the user values
+        Log.d("debug","MainActivity 2 "+mFirebaseAuth.getCurrentUser().toString());
         mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("debug","MainActivity 3");
                 //Toast.makeText(getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                 String user_json = snapshot.getValue().toString();
-                Gson gson = new Gson();
-                Type type = new TypeToken<User>() {}.getType();
-                User current_user = gson.fromJson(user_json,type);
-                Toast.makeText(MainActivity.this, current_user.password, Toast.LENGTH_SHORT).show();
-                if (current_user.password.equals("google_user")) GoogleSignOut();
-                if (current_user.password.equals("default_user")) DefaultSignOut();
+                user = snapshot.getValue(User.class);
+                Toast.makeText(MainActivity.this, user.password, Toast.LENGTH_SHORT).show();
+                if (user.password.equals("google_user")) {
+                    Log.d("debug","MainActivity 4");
+                    GoogleSignOut();
+                }
+                if (user.password.equals("default_user")) {
+                    Log.d("debug","MainActivity 5");
+                    DefaultSignOut();
+                }
             }
 
             @Override
@@ -204,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
     //signout if the user is not a google user
     private void DefaultSignOut(){
+        Log.d("debug","MainActivity-->default");
         FirebaseAuth.getInstance().signOut();
         Toast.makeText(MainActivity.this, "Logged Out!", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(getApplicationContext(), StartActivity.class));
@@ -211,13 +213,15 @@ public class MainActivity extends AppCompatActivity {
 
     //signout for the google users
     private void GoogleSignOut() {
+        Log.d("debug","MainActivity-->google");
         gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     // When task is successful
                     // Sign out from firebase
-                    mFirebaseAuth.signOut();
+                    FirebaseAuth.getInstance().signOut();
+                    GoogleSignIn.getClient(getApplicationContext(), new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()).signOut();
 
                     // Display Toast
                     Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_SHORT).show();
