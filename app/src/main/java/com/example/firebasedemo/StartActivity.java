@@ -30,8 +30,6 @@ public class StartActivity extends AppCompatActivity {
     private Button register;
     private Button login;
 
-    private ImageView google_img;
-
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
 

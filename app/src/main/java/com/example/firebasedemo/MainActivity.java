@@ -1,9 +1,11 @@
 package com.example.firebasedemo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -20,8 +23,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -47,13 +53,16 @@ public class MainActivity extends AppCompatActivity {
 
     private User user;
 
-    Button logout;
-    EditText edit;
-    Button add;
-    ListView listView;
+    private TextView debug;
+    private String debug_txt = "";
+
+    private Button logout;
+    private EditText edit;
+    private Button add;
+    private ListView listView;
+    private ArrayList<Food> list;
 
     private ImageView image;
-    private Uri image_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,24 +83,14 @@ public class MainActivity extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        image = findViewById(R.id.imageView);
-        getImage();
-
         logout = findViewById(R.id.logout);
         edit = findViewById(R.id.edit);
         add = findViewById(R.id.add);
         listView = findViewById(R.id.listView);
-
-        /*mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(MainActivity.this, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, "successful!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "failed!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
+        debug = findViewById(R.id.debug_main);
+        debug.setText("DEBUG");
+        image = findViewById(R.id.imageView);
+        getUser();
 
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -114,31 +113,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        //HashMap<String, Object> map = new HashMap<>();
-        //map.put("Name", "Gianluca");
-        //map.put("Email", "prova123@gmail1.com");
-        //FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Utente1").child("Name").setValue("Marco");
-        //FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Utente1").child("Name").removeValue();
-        //FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Languages").child("n1").setValue("Java");
-        //FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Languages").child("n2").setValue("Kotlin");
-        //FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Languages").child("n3").setValue("Flutter");
-        //FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Languages").child("n4").setValue("React Native");
 
-        ArrayList<String> list = new ArrayList<>();
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_item, list);
+        list = new ArrayList<Food>();
+        ArrayAdapter adapter = new ArrayAdapter<Food>(this, R.layout.list_item, list);
         listView.setAdapter(adapter);
 
-        DatabaseReference reference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Information");
-        reference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference FoodRef = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("Food");
+        FoodRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Information info = snapshot.getValue(Information.class);
-                    String txt = info.getName() + " : " + info.getEmail();
-                    list.add(txt);
-                }
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //Food f = snapshot.getValue(Food.class);
+                //list.add(f);
                 adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override
@@ -149,13 +150,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void getImage(){
-        mStorageReference.child("apples.jpg").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+    public void getAllImages(){
+        mStorageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+            @Override
+            public void onSuccess(ListResult listResult) {
+                for( StorageReference fileref: listResult.getItems()){
+                    debug_txt += fileref.getName() + "\n";
+                    debug.setText(debug_txt);
+                    addImage(fileref.getName());
+                }
+            }
+        });
+    }
+
+    public void addImage(String image){
+        mStorageReference.child(image).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
-                image_url = task.getResult();
-                Glide.with(getApplicationContext()).load(image_url).into(image);
-                getUser();
+                Uri image_url = task.getResult();
+                String[] l = image.replace(".jpg","").split("-");
+                Food f = new Food(l[0],"none",Integer.parseInt(l[1]),Integer.parseInt(l[2]),Integer.parseInt(l[3]),Integer.parseInt(l[4]),image_url.toString());
+                user.addFood(f);
+                mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
             }
         });
     }
@@ -166,10 +182,7 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot snapshot = task.getResult();
                 user = snapshot.getValue(User.class);
-                Food f = new Food();
-                f.imageurl = image_url.toString();
-                user.addFood(f);
-                mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
+                getAllImages();
             }
         });
     }
