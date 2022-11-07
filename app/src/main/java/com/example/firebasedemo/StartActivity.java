@@ -1,6 +1,5 @@
 package com.example.firebasedemo;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -17,17 +15,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class StartActivity extends AppCompatActivity {
 
-    private Button register;
+    private Button signup;
     private Button login;
 
     private GoogleSignInOptions gso;
@@ -41,11 +37,10 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
         Log.d("debug","StartActivity");
 
-        register = findViewById(R.id.register);
+        signup = findViewById(R.id.signup);
         login = findViewById(R.id.login);
 
-        Log.d("debug","StartActivity 1");
-        register.setOnClickListener(new View.OnClickListener() {
+        signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                startActivity(new Intent( StartActivity.this , RegisterActivity.class));
@@ -53,7 +48,6 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
-        Log.d("debug","StartActivity 2");
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,20 +56,16 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
-        Log.d("debug","StartActivity 3");
         // Initialize firebase auth
         firebaseAuth=FirebaseAuth.getInstance();
         // Initialize firebase user
 
-        Log.d("debug","StartActivity 4");
         FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
         if(firebaseUser!=null) {
             // When user already sign in
             // redirect to profile activity
-            Log.d("debug","StartActivity 5");
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
         }
-        Log.d("debug","StartActivity 6");
     }
 
     private void SignIn() {
@@ -102,7 +92,6 @@ public class StartActivity extends AppCompatActivity {
                     // Check credential
                     firebaseAuth.signInWithCredential(authCredential);
                     //TODO ordine signin insert data
-                    Log.d("debug","StartActivity 7");
                     startActivity( new Intent(getApplicationContext(),Register2Activity.class));
                 }
             } catch (ApiException e) {

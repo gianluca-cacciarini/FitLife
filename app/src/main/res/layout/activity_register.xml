@@ -67,10 +67,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/edittext_background"
-
             android:ems="10"
             android:hint="Enter Your Email"
-            android:inputType="textPersonName"
+            android:inputType="textEmailAddress"
             android:padding="12dp"
             android:textSize="18sp" />
 
@@ -90,7 +89,6 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/edittext_background"
-
             android:ems="10"
             android:hint="Enter Your Password"
             android:inputType="textPassword"
@@ -98,7 +96,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/register"
+            android:id="@+id/signup"
             style="@android:style/Widget.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

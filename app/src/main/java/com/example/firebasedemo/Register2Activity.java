@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,12 +18,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
 
 public class Register2Activity extends AppCompatActivity {
 
@@ -30,13 +34,15 @@ public class Register2Activity extends AppCompatActivity {
     private EditText carb_goal, weight, fat_goal, prot_goal, cal_goal, height;
     private int gender = -1;
     private String txt_email;
-    String txt_password;
-    User user;
-    
+    private String txt_password;
+    private User user;
     private CheckBox male, female;
+
+    private int goMain = 0;
 
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
+    private StorageReference mStorageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,8 @@ public class Register2Activity extends AppCompatActivity {
         prot_goal = findViewById(R.id.prot_goal);
         height = findViewById(R.id.height);
         weight = findViewById(R.id.weight);
+
+        mStorageReference = FirebaseStorage.getInstance().getReference().child("images");
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
         loadData();
@@ -104,7 +112,7 @@ public class Register2Activity extends AppCompatActivity {
                     // gender = 1 if male OR gender = 0 if female
                     user.setSex(gender);
                     if (mFirebaseAuth.getCurrentUser()!=null){
-                        insertData();
+                        insertFoods();
                     }
                     else{
                         registerUser(txt_email, txt_password);
@@ -123,8 +131,7 @@ public class Register2Activity extends AppCompatActivity {
                     Toast.makeText(Register2Activity.this, "Registering user successful!", Toast.LENGTH_SHORT).show();
                     user.setName(mFirebaseAuth.getCurrentUser().getEmail());
                     user.setPassword("default_user");
-                    insertData();
-                    startActivity(new Intent(Register2Activity.this, MainActivity.class));
+                    insertFoods();
                 } else {
                     Toast.makeText(Register2Activity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
                 }
@@ -137,6 +144,7 @@ public class Register2Activity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
+                    user.setName(mFirebaseAuth.getCurrentUser().getEmail());
                     Toast.makeText(Register2Activity.this, "Database updated!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(Register2Activity.this , MainActivity.class));
                 } else {
@@ -146,8 +154,36 @@ public class Register2Activity extends AppCompatActivity {
         });
     }
 
+    public void insertFoods(){
+        mStorageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+            @Override
+            public void onSuccess(ListResult listResult) {
+                goMain = listResult.getItems().size();
+                for( StorageReference fileref: listResult.getItems()){
+                    addFoodToUser(fileref.getName());
+                }
+            }
+        });
+    }
+
+    public void addFoodToUser(String image){
+        mStorageReference.child(image).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                Uri image_url = task.getResult();
+                String[] l = image.replace(".jpg","").split("-");
+                Food f = new Food(l[0],"none",Integer.parseInt(l[1]),Integer.parseInt(l[2]),Integer.parseInt(l[3]),Integer.parseInt(l[4]),image_url.toString());
+                user.addFood(f);
+                mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
+                goMain--;
+                if(goMain == 0){
+                    insertData();
+                }
+            }
+        });
+    }
+
     public void saveData(){
-        //
         SharedPreferences sharedPreferences = getSharedPreferences("ALL_ACTIVITY", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("EMAIL", txt_email);

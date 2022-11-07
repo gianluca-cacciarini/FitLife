@@ -7,25 +7,28 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SignInMethodQueryResult;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
-    private Button register;
+    private Button signup;
     String txt_email;
     String txt_password;
 
-    private FirebaseAuth auth;
+    private FirebaseAuth mfirebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +36,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
-        register = findViewById(R.id.register);
+        signup = findViewById(R.id.signup);
 
-        auth = FirebaseAuth.getInstance();
+        mfirebaseAuth = FirebaseAuth.getInstance();
 
-        register.setOnClickListener(new View.OnClickListener() {
+        signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 txt_email = email.getText().toString();
@@ -50,7 +53,24 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (txt_password.length() < 6){
                     Toast.makeText(RegisterActivity.this, "Password too short!", Toast.LENGTH_SHORT).show();
                 } else {
-                    //registerUser(txt_email , txt_password);
+                    checkEmail();
+                }
+            }
+        });
+    }
+
+    private void checkEmail(){
+        mfirebaseAuth.fetchSignInMethodsForEmail(email.getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+            @Override
+            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                Boolean check = !task.getResult().getSignInMethods().isEmpty();
+
+                if(check){
+                    Log.d("debug","email already present");
+                    loginUser(email.getText().toString(),password.getText().toString());
+                }
+                else{
+                    Log.d("debug","email not present");
                     saveData();
                     startActivity(new Intent(RegisterActivity.this , Register2Activity.class));
                 }
@@ -58,8 +78,19 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    private void loginUser(String email, String password) {
+        mfirebaseAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Log.d("debug","login successfull");
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        });
+
+    }
+
     private void registerUser(String email, String password) {
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+        mfirebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {

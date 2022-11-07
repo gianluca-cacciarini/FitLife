@@ -21,7 +21,7 @@ tools:context=".StartActivity">
     android:textColor=" #ffffff"
     android:textSize="25dp"
     android:textStyle="bold"
-    app:layout_constraintBottom_toTopOf="@+id/register"
+    app:layout_constraintBottom_toTopOf="@+id/signup"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -65,7 +65,7 @@ tools:context=".StartActivity">
         app:layout_constraintVertical_bias="0.0" />
 
 <Button
-    android:id="@+id/register"
+    android:id="@+id/signup"
     style="@android:style/Widget.Button"
     android:layout_width="0dp"
     android:layout_height="50dp"

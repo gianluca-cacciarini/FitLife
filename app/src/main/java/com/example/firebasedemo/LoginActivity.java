@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
 
-    private FirebaseAuth auth;
+    private FirebaseAuth mfirebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        auth = FirebaseAuth.getInstance();
+        mfirebaseAuth = FirebaseAuth.getInstance();
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,8 +81,6 @@ public class LoginActivity extends AppCompatActivity {
                 String txt_password = password.getText().toString();
                 if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
                     Toast.makeText(LoginActivity.this, "Empty credentials!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this , LoginActivity.class));
-                    finish();
                 } else loginUser(txt_email, txt_password);
             }
         });
@@ -111,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Initialize auth credential
                     AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
                     // Check credential
-                    auth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mfirebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             checkUserInDB();
@@ -145,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password) {
-        auth.signInWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+        mfirebaseAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();

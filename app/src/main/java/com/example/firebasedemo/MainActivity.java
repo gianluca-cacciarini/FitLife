@@ -1,26 +1,21 @@
 package com.example.firebasedemo;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -28,7 +23,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,10 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,13 +45,12 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView debug;
     private String debug_txt = "";
-    private Button logout;
+    private Button logout,add,food;
     private EditText edit;
-    private Button add;
 
     private RecyclerView recyclerView;
     private MyAdapterDiary myAdapterDiary;
-    private ArrayList<Food> food_list;
+    private ArrayList<Food> food_list = new ArrayList<Food>();
 
     private User user;
     private ImageView image;
@@ -86,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         debug = findViewById(R.id.debug_main);
         debug.setText("DEBUG");
         image = findViewById(R.id.imageView);
+        food = findViewById(R.id.goFoodActivity);
+
 
         recyclerView = findViewById(R.id.diary_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -93,12 +85,10 @@ public class MainActivity extends AppCompatActivity {
         myAdapterDiary = new MyAdapterDiary(getApplicationContext(),food_list);
         recyclerView.setAdapter(myAdapterDiary);
 
-        buildRecyclerView();
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Log.d("debug","MainActivity 1");
                 signOut();
             }
@@ -116,28 +106,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    public void buildRecyclerView(){
-        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        food.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User u = snapshot.getValue(User.class);
-                for( String key: u.getFood_list().keySet()){
-                    food_list.add(u.getFood_list().get(key));
-                    //Toast.makeText(MainActivity.this, key+" "+String.valueOf(food_list.size()), Toast.LENGTH_SHORT).show();
-                }
-                myAdapterDiary.notifyDataSetChanged();
-                //Toast.makeText(MainActivity.this, "notified", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),FoodPageActivity.class));
             }
         });
     }
 
+    public void insertFoodList(){
+        for( String key : user.getFood_list().keySet()){
+            food_list.add(user.getFood_list().get(key));
+        }
+        myAdapterDiary.notifyDataSetChanged();
+    }
 
     public void getUser(){
         mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -145,37 +127,11 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot snapshot = task.getResult();
                 user = snapshot.getValue(User.class);
-                getAllImages();
+                //getAllImages();
+                insertFoodList();
             }
         });
     }
-
-    public void getAllImages(){
-        mStorageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
-            @Override
-            public void onSuccess(ListResult listResult) {
-                for( StorageReference fileref: listResult.getItems()){
-                    debug_txt += fileref.getName() + "\n";
-                    debug.setText(debug_txt);
-                    addImage(fileref.getName());
-                }
-            }
-        });
-    }
-
-    public void addImage(String image){
-        mStorageReference.child(image).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                Uri image_url = task.getResult();
-                String[] l = image.replace(".jpg","").split("-");
-                Food f = new Food(l[0],"none",Integer.parseInt(l[1]),Integer.parseInt(l[2]),Integer.parseInt(l[3]),Integer.parseInt(l[4]),image_url.toString());
-                user.addFood(f);
-                mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
-            }
-        });
-    }
-
 
 
     //function that check if the user is a google user or a default user in order to signout him/her

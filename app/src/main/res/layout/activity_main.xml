@@ -69,12 +69,18 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/diary_view"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.993" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/goFoodActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="food"
+        app:layout_constraintStart_toEndOf="@+id/logout"
+        app:layout_constraintTop_toBottomOf="@+id/edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
