@@ -8,26 +8,73 @@
     android:background="@color/white">
 
     <TextView
-        android:id="@+id/step_counter_number"
+        android:id="@+id/step_counter_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
         android:textColor="#3F51B5"
         android:textSize="34sp"
-        app:layout_constraintStart_toEndOf="@+id/textview_steps"
-        app:layout_constraintTop_toTopOf="@+id/textview_steps" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_today_steps" />
 
     <TextView
-        android:id="@+id/textview_steps"
+        android:id="@+id/step_counter_week"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="steps:"
+        android:text="0"
         android:textColor="#3F51B5"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_week_steps" />
+
+    <TextView
+        android:id="@+id/step_counter_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="#3F51B5"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_month_steps" />
+
+    <TextView
+        android:id="@+id/textview_today_steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="today steps:"
+        android:textColor="#3F51B5"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date" />
+
+    <TextView
+        android:id="@+id/textview_week_steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="weekly steps:"
+        android:textColor="#3F51B5"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_counter_day" />
+
+    <TextView
+        android:id="@+id/textview_month_steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="month steps:"
+        android:textColor="#3F51B5"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_counter_week" />
 
     <TextView
         android:id="@+id/date"

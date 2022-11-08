@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -27,10 +28,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class PedometerPageActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -43,7 +46,7 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
     private User user;
 
     private BottomNavigationView navigationView;
-    private TextView steps_text, steps_title_text, date_text;
+    private TextView day_steps, week_step, month_step, date_text;
     private int current_steps =0;
     private int increment=0;
     private int prev=0;
@@ -59,11 +62,11 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
         }
         else{
             Toast.makeText(this, "sensor not found", Toast.LENGTH_SHORT).show();
-            steps_title_text.setText("sensor not found");
         }
         loadData();
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,11 +85,12 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
 
         //DISPLAY
         date_text = findViewById(R.id.date);
-        steps_text = findViewById(R.id.step_counter_number);
-        //steps_title_text = findViewById(R.id.step_counter_text);
+        day_steps = findViewById(R.id.step_counter_day);
+        week_step = findViewById(R.id.step_counter_week);
+        month_step = findViewById(R.id.step_counter_month);
 
         Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
         currentDay = df.format(currentTime);
         date_text.setText(currentDay);
 
@@ -135,7 +139,7 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
         Log.e("debug: ", currentDay+"   "+lastDay+" "+String.valueOf(current_steps));
 
         Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
         currentDay = df.format(currentTime);
         date_text.setText(currentDay);
 
@@ -148,28 +152,25 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
         //case where this isn't the first i open the app, but it is the first
         //time i open the app today
         else if(!currentDay.equals(lastDay) && !lastDay.equals("none")){
-            increment=(int) sensorEvent.values[0]-prev;
-            //save the number of steps in the database
-            current_steps += increment;
-
             current_steps = 0;
             prev = (int) sensorEvent.values[0];
             lastDay = currentDay;
         }
         //case where it's the the second time i open the app today
         else {
-            Log.d("debug","case 3");
             int aux = (int) sensorEvent.values[0];
             increment = aux - prev;
             current_steps += increment;
             prev = aux;
         }
-        steps_text.setText(String.valueOf(current_steps));
+        day_steps.setText(String.valueOf(current_steps));
         Step step = new Step(currentDay,current_steps);
         saveData();
         if(user!=null) {
             user.addStep(step);
             updateUser();
+            getWeekSteps();
+            getMonthSteps();
         }
     }
 
@@ -212,5 +213,46 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
         lastDay = sharedPreferences.getString("CURRENT_DAY","none");
     }
 
+    public void getWeekSteps(){
+        int sum = 0;
+        for( String key : user.step_list.keySet()){
+            Step s = user.step_list.get(key);
+            SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
+            try {
+                Date date1 = myFormat.parse(s.getDate());
+                Date date2 = myFormat.parse(currentDay);
+                long duration  = date2.getTime() - date1.getTime();
+                long diffInDays = TimeUnit.MILLISECONDS.toDays(duration);
+                //week_step.setText(String.valueOf(diffInDays));
+                if( diffInDays<=7 ){
+                    sum += s.getStep();
+                    week_step.setText(String.valueOf(sum));
+                }
+            }catch (Exception e){
+
+            }
+        }
+    }
+
+    public void getMonthSteps(){
+        int sum = 0;
+        for( String key : user.step_list.keySet()){
+            Step s = user.step_list.get(key);
+            SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
+            try {
+                Date date1 = myFormat.parse(s.getDate());
+                Date date2 = myFormat.parse(currentDay);
+                long duration  = date2.getTime() - date1.getTime();
+                long diffInDays = TimeUnit.MILLISECONDS.toDays(duration);
+                //week_step.setText(String.valueOf(diffInDays));
+                if( diffInDays<=30 ){
+                    sum += s.getStep();
+                    month_step.setText(String.valueOf(sum));
+                }
+            }catch (Exception e){
+
+            }
+        }
+    }
 
 }
