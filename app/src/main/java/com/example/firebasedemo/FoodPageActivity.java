@@ -61,7 +61,7 @@ public class FoodPageActivity extends AppCompatActivity {
 
                     case R.id.bottom_diary:
                         Toast.makeText(getApplicationContext(),"diary",Toast.LENGTH_SHORT).show();
-                        //do nothing since we are already in the Diary activity
+                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
                         return true;
                     case R.id.bottom_exercise:
                         Toast.makeText(getApplicationContext(),"exercise",Toast.LENGTH_SHORT).show();
@@ -69,7 +69,7 @@ public class FoodPageActivity extends AppCompatActivity {
                         return true;
                     case R.id.bottom_food:
                         Toast.makeText(getApplicationContext(),"food",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(),FoodPageActivity.class));
+                        //do nothing im already in the food page
                         return true;
                     case R.id.bottom_step_counter:
                         Toast.makeText(getApplicationContext(),"timer",Toast.LENGTH_SHORT).show();

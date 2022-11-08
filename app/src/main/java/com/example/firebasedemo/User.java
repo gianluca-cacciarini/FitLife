@@ -23,6 +23,7 @@ public class User {
     public HashMap<String,Food> food_list;
     public HashMap<String,Exercise> exercise_list;
     public HashMap<String,Day> diary;
+    public HashMap<String, Step> step_list;
 
 
     public User() {
@@ -32,6 +33,7 @@ public class User {
         food_list = new HashMap<String,Food>();
         exercise_list = new HashMap<String,Exercise>();
         diary = new HashMap<String,Day>();
+        step_list = new HashMap<String, Step>();
         weight = 0;
         height = 0;
         carb_goal = 0;
@@ -42,7 +44,7 @@ public class User {
 
     public User(String email, String password,
                 int sex, int weight, int height, int carb_goal, int prot_goal, int fat_goal, int cal_goal,
-                 HashMap<String, Food> food_list, HashMap<String, Exercise> exercise_list, HashMap<String, Day> diary) {
+                 HashMap<String, Food> food_list, HashMap<String, Exercise> exercise_list, HashMap<String, Day> diary, HashMap<String,Step> step_list) {
         this.name = email;
         this.password = password;
         this.sex = sex;
@@ -55,6 +57,7 @@ public class User {
         this.food_list = food_list;
         this.exercise_list = exercise_list;
         this.diary = diary;
+        this.step_list = step_list;
     }
 
     public User(String email, String password, int sex, int weight, int height, int carb_goal, int prot_goal, int fat_goal, int cal_goal) {
@@ -111,6 +114,13 @@ public class User {
             this.food_list = new HashMap<String,Food>();
         }
         this.food_list.put(new_food.name,new_food);
+    }
+
+    public void addStep(Step new_step){
+        if (this.step_list == null){
+            this.step_list = new HashMap<String,Step>();
+        }
+        this.step_list.put(new_step.getDate(),new_step);
     }
 
     public String getName() {
@@ -207,6 +217,14 @@ public class User {
 
     public void setDiary(HashMap<String, Day> diary) {
         this.diary = diary;
+    }
+
+    public HashMap<String, Step> getStep_list() {
+        return step_list;
+    }
+
+    public void setStep_list(HashMap<String, Step> step_list) {
+        this.step_list = step_list;
     }
 }
 

@@ -4,7 +4,7 @@
     <item
         android:id="@+id/bottom_step_counter"
         android:icon="@drawable/walking"
-        android:title="Time" />
+        android:title="Step" />
     <item
         android:id="@+id/bottom_food"
         android:icon="@drawable/food"
@@ -16,7 +16,7 @@
     <item
         android:id="@+id/bottom_exercise"
         android:icon="@drawable/football"
-        android:title="exercise" />
+        android:title="Exercise" />
     <item
         android:id="@+id/bottom_user"
         android:icon="@drawable/person"

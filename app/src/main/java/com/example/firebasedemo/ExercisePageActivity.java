@@ -34,11 +34,11 @@ public class ExercisePageActivity extends AppCompatActivity {
                         return true;
                     case R.id.bottom_exercise:
                         Toast.makeText(getApplicationContext(),"exercise",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(),ExercisePageActivity.class));
+                        //do nothing im already in the exericise page
                         return true;
                     case R.id.bottom_food:
                         Toast.makeText(getApplicationContext(),"food",Toast.LENGTH_SHORT).show();
-                        //do nothing im already in the exercise page
+                        startActivity(new Intent(getApplicationContext(),FoodPageActivity.class));
                         return true;
                     case R.id.bottom_step_counter:
                         Toast.makeText(getApplicationContext(),"timer",Toast.LENGTH_SHORT).show();
