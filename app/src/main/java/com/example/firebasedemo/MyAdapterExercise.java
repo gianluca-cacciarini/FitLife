@@ -24,7 +24,7 @@ public class MyAdapterExercise extends RecyclerView.Adapter<MyAdapterExercise.My
     @Override
     public MyAdapterExercise.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.diary_item,parent,false);
+        View view = inflater.inflate(R.layout.exercise_item,parent,false);
         return new MyAdapterExercise.MyViewHolder(view);
     }
 
@@ -48,9 +48,9 @@ public class MyAdapterExercise extends RecyclerView.Adapter<MyAdapterExercise.My
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.nameDiary);
+            name = itemView.findViewById(R.id.nameExercise);
             category = itemView.findViewById(R.id.categoryDiary);
-            image = itemView.findViewById(R.id.imageDiary);
+            image = itemView.findViewById(R.id.imageExercise);
         }
     }
 

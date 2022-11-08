@@ -16,7 +16,7 @@
         android:paddingRight="5dp">
 
         <ImageView
-            android:id="@+id/imageDiary"
+            android:id="@+id/imageExercise"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="fitXY"
@@ -27,16 +27,16 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/nameDiary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/nameExercise"
+            android:layout_width="46dp"
+            android:layout_height="27dp"
             android:text="Name"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageDiary"
+            app:layout_constraintStart_toEndOf="@+id/imageExercise"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.146" />
 
@@ -50,8 +50,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageDiary"
-            app:layout_constraintTop_toBottomOf="@+id/nameDiary"
+            app:layout_constraintStart_toEndOf="@+id/imageExercise"
+            app:layout_constraintTop_toBottomOf="@+id/nameExercise"
             app:layout_constraintVertical_bias="0.0" />
 
 

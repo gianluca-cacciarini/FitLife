@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:backgroundTint="@color/blue">
+    android:backgroundTint="@color/red">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         android:paddingRight="5dp">
 
         <ImageView
-            android:id="@+id/imageDiary"
+            android:id="@+id/imageFood"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="fitXY"
@@ -27,7 +27,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/nameDiary"
+            android:id="@+id/nameFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
@@ -36,12 +36,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageDiary"
+            app:layout_constraintStart_toEndOf="@+id/imageFood"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.146" />
 
         <TextView
-            android:id="@+id/categoryDiary"
+            android:id="@+id/categoryFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category"
@@ -50,12 +50,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageDiary"
-            app:layout_constraintTop_toBottomOf="@+id/nameDiary"
+            app:layout_constraintStart_toEndOf="@+id/imageFood"
+            app:layout_constraintTop_toBottomOf="@+id/nameFood"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/carbDiary"
+            android:id="@+id/carbFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CARB"
@@ -64,38 +64,38 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageDiary"
-            app:layout_constraintTop_toBottomOf="@+id/categoryDiary" />
+            app:layout_constraintStart_toEndOf="@+id/imageFood"
+            app:layout_constraintTop_toBottomOf="@+id/categoryFood" />
 
         <TextView
-            android:id="@+id/protDiary"
+            android:id="@+id/protFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PROT"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/carbDiary"
-            app:layout_constraintTop_toTopOf="@+id/carbDiary" />
+            app:layout_constraintStart_toEndOf="@+id/carbFood"
+            app:layout_constraintTop_toTopOf="@+id/carbFood" />
 
         <TextView
-            android:id="@+id/fatDiary"
+            android:id="@+id/fatFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="FAT"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/protDiary"
-            app:layout_constraintTop_toTopOf="@+id/protDiary" />
+            app:layout_constraintStart_toEndOf="@+id/protFood"
+            app:layout_constraintTop_toTopOf="@+id/protFood" />
 
         <TextView
-            android:id="@+id/calDiary"
+            android:id="@+id/calFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CAL"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/fatDiary"
-            app:layout_constraintTop_toTopOf="@+id/fatDiary" />
+            app:layout_constraintStart_toEndOf="@+id/fatFood"
+            app:layout_constraintTop_toTopOf="@+id/fatFood" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

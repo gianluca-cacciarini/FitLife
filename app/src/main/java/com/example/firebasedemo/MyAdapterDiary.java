@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,13 +55,13 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            name = itemView.findViewById(R.id.nameDiary);
+            name = itemView.findViewById(R.id.nameExercise);
             category = itemView.findViewById(R.id.categoryDiary);
             carb = itemView.findViewById(R.id.carbDiary);
             prot = itemView.findViewById(R.id.protDiary);
             fat = itemView.findViewById(R.id.fatDiary);
             cal = itemView.findViewById(R.id.calDiary);
-            image = itemView.findViewById(R.id.imageDiary);
+            image = itemView.findViewById(R.id.imageExercise);
 
 
         }

@@ -24,7 +24,7 @@ public class MyAdapterFood extends RecyclerView.Adapter<MyAdapterFood.MyViewHold
     @Override
     public MyAdapterFood.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.diary_item,parent,false);
+        View view = inflater.inflate(R.layout.food_item,parent,false);
         return new MyAdapterFood.MyViewHolder(view);
     }
 
@@ -55,13 +55,13 @@ public class MyAdapterFood extends RecyclerView.Adapter<MyAdapterFood.MyViewHold
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            name = itemView.findViewById(R.id.nameDiary);
-            category = itemView.findViewById(R.id.categoryDiary);
-            carb = itemView.findViewById(R.id.carbDiary);
-            prot = itemView.findViewById(R.id.protDiary);
-            fat = itemView.findViewById(R.id.fatDiary);
-            cal = itemView.findViewById(R.id.calDiary);
-            image = itemView.findViewById(R.id.imageDiary);
+            name = itemView.findViewById(R.id.nameFood);
+            category = itemView.findViewById(R.id.categoryFood);
+            carb = itemView.findViewById(R.id.carbFood);
+            prot = itemView.findViewById(R.id.protFood);
+            fat = itemView.findViewById(R.id.fatFood);
+            cal = itemView.findViewById(R.id.calFood);
+            image = itemView.findViewById(R.id.imageFood);
 
 
         }
