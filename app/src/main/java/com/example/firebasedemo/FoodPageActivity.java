@@ -29,7 +29,7 @@ public class FoodPageActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private MyAdapterFood myAdapterFood;
-    private ArrayList<Food> food_list = new ArrayList<Food>();
+    private ArrayList<Food> food_list;
 
     private User user;
 

@@ -113,6 +113,7 @@ public class Register2Activity extends AppCompatActivity {
                     user.setSex(gender);
                     if (mFirebaseAuth.getCurrentUser()!=null){
                         insertFoods();
+                        insertExercises();
                     }
                     else{
                         registerUser(txt_email, txt_password);
@@ -132,6 +133,7 @@ public class Register2Activity extends AppCompatActivity {
                     user.setName(mFirebaseAuth.getCurrentUser().getEmail());
                     user.setPassword("default_user");
                     insertFoods();
+                    insertExercises();
                 } else {
                     Toast.makeText(Register2Activity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
                 }
@@ -154,8 +156,37 @@ public class Register2Activity extends AppCompatActivity {
         });
     }
 
+    public void insertExercises(){
+        mStorageReference.child("exercise").listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+            @Override
+            public void onSuccess(ListResult listResult) {
+                goMain += listResult.getItems().size();
+                for( StorageReference fileref: listResult.getItems()){
+                    addExerciseToUser(fileref.getName());
+                }
+            }
+        });
+    }
+
+    public void addExerciseToUser(String image){
+        mStorageReference.child("exercise").child(image).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                Uri image_url = task.getResult();
+                String l = image.replace(".jpg","");
+                Exercise e = new Exercise(l,"none",image_url.toString());
+                user.addExercise(e);
+                mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
+                goMain--;
+                if(goMain == 0){
+                    insertData();
+                }
+            }
+        });
+    }
+
     public void insertFoods(){
-        mStorageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+        mStorageReference.child("food").listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
             @Override
             public void onSuccess(ListResult listResult) {
                 goMain = listResult.getItems().size();
@@ -167,7 +198,7 @@ public class Register2Activity extends AppCompatActivity {
     }
 
     public void addFoodToUser(String image){
-        mStorageReference.child(image).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+        mStorageReference.child("food").child(image).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 Uri image_url = task.getResult();

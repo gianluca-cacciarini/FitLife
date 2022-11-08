@@ -109,6 +109,13 @@ public class User {
         return res;
     }
 
+    public void addExercise(Exercise new_exercise){
+        if (this.exercise_list == null){
+            this.exercise_list = new HashMap<String,Exercise>();
+        }
+        this.exercise_list.put(new_exercise.name,new_exercise);
+    }
+
     public void addFood(Food new_food){
         if (this.food_list == null){
             this.food_list = new HashMap<String,Food>();

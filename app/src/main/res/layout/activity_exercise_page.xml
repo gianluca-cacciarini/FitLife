@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExercisePageActivity">
+    tools:context=".ExercisePageActivity"
+    android:background="@color/white">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation_bar"
@@ -17,5 +18,15 @@
         android:background="@color/grey"
         app:itemIconTint="@color/red"
         app:itemTextColor="@color/black"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/exercise_view"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

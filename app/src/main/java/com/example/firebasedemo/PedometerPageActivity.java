@@ -168,6 +168,7 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
         saveData();
         if(user!=null) {
             user.addStep(step);
+
             updateUser();
             getWeekSteps();
             getMonthSteps();

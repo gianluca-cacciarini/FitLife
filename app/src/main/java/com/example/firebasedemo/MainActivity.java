@@ -44,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient gsc;
 
     private TextView debug;
-    private String debug_txt = "";
-    private Button logout,add,food;
+    private Button logout,add;
     private EditText edit;
 
     private RecyclerView recyclerView;
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Food> food_list = new ArrayList<Food>();
 
     private User user;
-    private ImageView image;
 
     private BottomNavigationView navigationView;
 
@@ -61,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Log.d("debug","MainActivity");
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
@@ -77,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
         add = findViewById(R.id.add);
         debug = findViewById(R.id.debug_main);
         debug.setText("DEBUG");
-        image = findViewById(R.id.imageView);
-        food = findViewById(R.id.goFoodActivity);
 
         recyclerView = findViewById(R.id.diary_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -136,13 +131,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("ProgrammingK").push().child("Name").setValue(txt_name);
                 }
-            }
-        });
-
-        food.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),FoodPageActivity.class));
             }
         });
     }
