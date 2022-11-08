@@ -6,4 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".PedometerPageActivity">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/navigation_menu"
+        android:background="@color/grey"
+        app:itemIconTint="@color/red"
+        app:itemTextColor="@color/black"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

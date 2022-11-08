@@ -5,15 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 
@@ -27,6 +32,8 @@ public class FoodPageActivity extends AppCompatActivity {
     private ArrayList<Food> food_list = new ArrayList<Food>();
 
     private User user;
+
+    private BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,42 @@ public class FoodPageActivity extends AppCompatActivity {
         food_list = new ArrayList<Food>();
         myAdapterFood = new MyAdapterFood(getApplicationContext(),food_list);
         recyclerView.setAdapter(myAdapterFood);
+
+
+        navigationView = findViewById(R.id.navigation_bar);
+        navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Log.d("debug","clicked");
+                switch (item.getItemId()){
+
+                    case R.id.bottom_diary:
+                        Toast.makeText(getApplicationContext(),"diary",Toast.LENGTH_SHORT).show();
+                        //do nothing since we are already in the Diary activity
+                        return true;
+                    case R.id.bottom_exercise:
+                        Toast.makeText(getApplicationContext(),"exercise",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),ExercisePageActivity.class));
+                        return true;
+                    case R.id.bottom_food:
+                        Toast.makeText(getApplicationContext(),"food",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),FoodPageActivity.class));
+                        return true;
+                    case R.id.bottom_step_counter:
+                        Toast.makeText(getApplicationContext(),"timer",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),PedometerPageActivity.class));
+                        return true;
+                    case R.id.bottom_user:
+                        Toast.makeText(getApplicationContext(),"user",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),UserPageActivity.class));
+                        return true;
+                }
+                return true;
+            }
+        });
+
+
+
     }
 
     public void insertFoodList(){

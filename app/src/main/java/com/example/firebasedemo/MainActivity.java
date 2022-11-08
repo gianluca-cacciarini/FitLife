@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,8 +20,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private User user;
     private ImageView image;
 
+    private BottomNavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,12 +80,43 @@ public class MainActivity extends AppCompatActivity {
         image = findViewById(R.id.imageView);
         food = findViewById(R.id.goFoodActivity);
 
-
         recyclerView = findViewById(R.id.diary_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         food_list = new ArrayList<Food>();
         myAdapterDiary = new MyAdapterDiary(getApplicationContext(),food_list);
         recyclerView.setAdapter(myAdapterDiary);
+
+        navigationView = findViewById(R.id.navigation_bar);
+        navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Log.d("debug","clicked");
+                switch (item.getItemId()){
+
+                    case R.id.bottom_diary:
+                        Toast.makeText(getApplicationContext(),"diary",Toast.LENGTH_SHORT).show();
+                        //do nothing since we are already in the Diary activity
+                        return true;
+                    case R.id.bottom_exercise:
+                        Toast.makeText(getApplicationContext(),"exercise",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),ExercisePageActivity.class));
+                        return true;
+                    case R.id.bottom_food:
+                        Toast.makeText(getApplicationContext(),"food",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),FoodPageActivity.class));
+                        return true;
+                    case R.id.bottom_step_counter:
+                        Toast.makeText(getApplicationContext(),"timer",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),PedometerPageActivity.class));
+                        return true;
+                    case R.id.bottom_user:
+                        Toast.makeText(getApplicationContext(),"user",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),UserPageActivity.class));
+                        return true;
+                }
+                return true;
+            }
+        });
 
 
         logout.setOnClickListener(new View.OnClickListener() {

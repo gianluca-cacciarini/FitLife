@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_step_counter"
+        android:icon="@drawable/walking"
+        android:title="Time" />
+    <item
+        android:id="@+id/bottom_food"
+        android:icon="@drawable/food"
+        android:title="Food" />
+    <item
+        android:id="@+id/bottom_diary"
+        android:icon="@drawable/diary"
+        android:title="Diary" />
+    <item
+        android:id="@+id/bottom_exercise"
+        android:icon="@drawable/football"
+        android:title="exercise" />
+    <item
+        android:id="@+id/bottom_user"
+        android:icon="@drawable/person"
+        android:title="User" />
+
+</menu>
