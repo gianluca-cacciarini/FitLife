@@ -22,10 +22,26 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/exercise_view"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="625dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/search_exercise_text" />
+
+    <AutoCompleteTextView
+        android:id="@+id/search_exercise_text"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/grey"
+        android:completionThreshold="1"
+        android:drawableEnd="@drawable/search_img"
+        android:drawableTint="@color/black"
+        android:hint="search"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black" />
 
 
 

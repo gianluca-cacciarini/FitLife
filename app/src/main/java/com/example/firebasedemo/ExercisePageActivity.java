@@ -7,8 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,7 +38,9 @@ public class ExercisePageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MyAdapterExercise myAdapterExercise;
     private ArrayList<Exercise> exercise_list;
-
+    private ArrayList<String> exercise_name_list;
+    private AutoCompleteTextView search;
+    private ArrayAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +54,12 @@ public class ExercisePageActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.exercise_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         exercise_list = new ArrayList<Exercise>();
+        exercise_name_list = new ArrayList<String>();
         myAdapterExercise = new MyAdapterExercise(getApplicationContext(), exercise_list);
         recyclerView.setAdapter(myAdapterExercise);
+        search = findViewById(R.id.search_exercise_text);
+        adapter = (ArrayAdapter<String>) new ArrayAdapter<String>(getApplicationContext(), R.layout.autocomplete_layout,exercise_name_list);
+        search.setAdapter(adapter);
 
         navigationView = findViewById(R.id.navigation_bar);
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -82,13 +92,50 @@ public class ExercisePageActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //non mi serve
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.d("debug","clicked");
+                String prefix = search.getText().toString();
+                exercise_list = new ArrayList<Exercise>();
+                exercise_name_list = new ArrayList<String>();
+                insertExerciseList(prefix);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //non mi serve
+            }
+        });
     }
 
-    public void insertExerciseList(){
+    public void insertExerciseList(String prefix){
+        prefix = prefix.toLowerCase();
         for( String key : user.getExercise_list().keySet()){
-            exercise_list.add(user.getExercise_list().get(key));
+            if(prefix.equals("")) {
+                exercise_list.add(user.getExercise_list().get(key));
+                exercise_name_list.add(user.getExercise_list().get(key).getName());
+            }
+            else{
+                String name = user.getExercise_list().get(key).getName();
+                if( name.startsWith(prefix)){
+                    exercise_list.add(user.getExercise_list().get(key));
+                    exercise_name_list.add(user.getExercise_list().get(key).getName());
+                }
+            }
         }
+        myAdapterExercise = new MyAdapterExercise(getApplicationContext(),exercise_list);
+        recyclerView.setAdapter(myAdapterExercise);
         myAdapterExercise.notifyDataSetChanged();
+        Log.d("debug","notifydatasethaschanged");
+        Log.d("debug",exercise_name_list.toString());
+        Log.d("debug",exercise_list.toString());
     }
 
     public void getUser(){
@@ -97,7 +144,7 @@ public class ExercisePageActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot snapshot = task.getResult();
                 user = snapshot.getValue(User.class);
-                insertExerciseList();
+                insertExerciseList("");
             }
         });
     }

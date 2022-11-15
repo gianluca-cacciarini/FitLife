@@ -7,8 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class FoodPageActivity extends AppCompatActivity {
 
@@ -30,6 +37,9 @@ public class FoodPageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MyAdapterFood myAdapterFood;
     private ArrayList<Food> food_list;
+    private ArrayList<String> food_name_list;
+    private AutoCompleteTextView search;
+    private ArrayAdapter adapter;
 
     private User user;
 
@@ -48,8 +58,13 @@ public class FoodPageActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.food_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         food_list = new ArrayList<Food>();
+        food_name_list = new ArrayList<String>();
         myAdapterFood = new MyAdapterFood(getApplicationContext(),food_list);
         recyclerView.setAdapter(myAdapterFood);
+
+        search = findViewById(R.id.search_food_text);
+        adapter = (ArrayAdapter<String>) new ArrayAdapter<String>(getApplicationContext(), R.layout.autocomplete_layout,food_name_list);
+        search.setAdapter(adapter);
 
 
         navigationView = findViewById(R.id.navigation_bar);
@@ -84,15 +99,50 @@ public class FoodPageActivity extends AppCompatActivity {
             }
         });
 
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //non mi serve
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.d("debug","clicked");
+                String prefix = search.getText().toString();
+                food_list = new ArrayList<Food>();
+                food_name_list = new ArrayList<String>();
+                insertFoodList(prefix);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //non mi serve
+            }
+        });
 
     }
 
-    public void insertFoodList(){
+    public void insertFoodList(String prefix){
+        prefix = prefix.toLowerCase();
         for( String key : user.getFood_list().keySet()){
-            food_list.add(user.getFood_list().get(key));
+            if(prefix.equals("")) {
+                food_list.add(user.getFood_list().get(key));
+                food_name_list.add(user.getFood_list().get(key).getName());
+            }
+            else{
+                String name = user.getFood_list().get(key).getName();
+                if( name.startsWith(prefix)){
+                    food_list.add(user.getFood_list().get(key));
+                    food_name_list.add(user.getFood_list().get(key).getName());
+                }
+            }
         }
+        myAdapterFood = new MyAdapterFood(getApplicationContext(),food_list);
+        recyclerView.setAdapter(myAdapterFood);
         myAdapterFood.notifyDataSetChanged();
+        Log.d("debug","notifydatasethaschanged");
+        Log.d("debug",food_name_list.toString());
+        Log.d("debug",food_list.toString());
     }
 
     public void getUser(){
@@ -101,7 +151,8 @@ public class FoodPageActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot snapshot = task.getResult();
                 user = snapshot.getValue(User.class);
-                insertFoodList();
+                String prefix = "";
+                insertFoodList(prefix);
             }
         });
     }
