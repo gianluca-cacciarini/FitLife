@@ -34,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -139,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
         for( String key : user.getFood_list().keySet()){
             food_list.add(user.getFood_list().get(key));
         }
+        Collections.sort(food_list);
+        //Collections.sort(food_name_list);
         myAdapterDiary.notifyDataSetChanged();
     }
 

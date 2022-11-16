@@ -4,7 +4,7 @@ package com.example.firebasedemo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class Exercise {
+public class Exercise implements Comparable<Exercise> {
 
     public String name;
     public String category;
@@ -72,5 +72,10 @@ public class Exercise {
 
     public void setImageurl(String imageurl) {
         this.imageurl = imageurl;
+    }
+
+    @Override
+    public int compareTo(Exercise exercise) {
+        return this.getName().compareTo(exercise.getName());
     }
 }

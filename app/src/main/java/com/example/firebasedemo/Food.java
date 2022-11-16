@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class Food {
+public class Food implements Comparable<Food> {
 
     public String name;
     public String category;
@@ -74,6 +74,8 @@ public class Food {
         return res;
     }
 
+
+
     public String getName() {
         return name;
     }
@@ -124,4 +126,9 @@ public class Food {
     public String getImageurl() {return imageurl;}
 
     public void setImageurl(String imageurl) {this.imageurl = imageurl;}
+
+    @Override
+    public int compareTo(Food food) {
+        return this.getName().compareTo(food.getName());
+    }
 }

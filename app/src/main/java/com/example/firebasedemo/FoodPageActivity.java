@@ -31,6 +31,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 public class FoodPageActivity extends AppCompatActivity {
@@ -207,6 +211,8 @@ public class FoodPageActivity extends AppCompatActivity {
                 food_name_list.add(user.getFood_list().get(key).getName());
             }
         }
+        Collections.sort(food_list);
+        Collections.sort(food_name_list);
         myAdapterFood = new MyAdapterFood(getApplicationContext(),food_list);
         recyclerView.setAdapter(myAdapterFood);
         myAdapterFood.notifyDataSetChanged();
@@ -231,6 +237,8 @@ public class FoodPageActivity extends AppCompatActivity {
                 }
             }
         }
+        Collections.sort(food_list);
+        Collections.sort(food_name_list);
         myAdapterFood = new MyAdapterFood(getApplicationContext(),food_list);
         recyclerView.setAdapter(myAdapterFood);
         myAdapterFood.notifyDataSetChanged();
