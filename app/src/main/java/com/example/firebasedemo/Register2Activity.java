@@ -173,8 +173,8 @@ public class Register2Activity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 Uri image_url = task.getResult();
-                String l = image.replace(".jpg","");
-                Exercise e = new Exercise(l,"none",image_url.toString());
+                String[] l = image.replace(".jpg","").split("-");
+                Exercise e = new Exercise(l[0],l[1],image_url.toString());
                 user.addExercise(e);
                 mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
                 goMain--;
@@ -203,7 +203,7 @@ public class Register2Activity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Uri> task) {
                 Uri image_url = task.getResult();
                 String[] l = image.replace(".jpg","").split("-");
-                Food f = new Food(l[0],"none",Integer.parseInt(l[1]),Integer.parseInt(l[2]),Integer.parseInt(l[3]),Integer.parseInt(l[4]),image_url.toString());
+                Food f = new Food(l[0],l[1],Integer.parseInt(l[2]),Integer.parseInt(l[3]),Integer.parseInt(l[4]),Integer.parseInt(l[5]),image_url.toString());
                 user.addFood(f);
                 mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
                 goMain--;
