@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -42,8 +45,11 @@ public class FoodPageActivity extends AppCompatActivity {
     private ArrayAdapter adapter;
 
     private User user;
-
     private BottomNavigationView navigationView;
+
+    private FloatingActionButton filter,filterA,filterB;
+    private Animation filterOpen, filterClose;
+    private Boolean isOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,19 @@ public class FoodPageActivity extends AppCompatActivity {
         adapter = (ArrayAdapter<String>) new ArrayAdapter<String>(getApplicationContext(), R.layout.autocomplete_layout,food_name_list);
         search.setAdapter(adapter);
 
+        filter = findViewById(R.id.foodfilter);
+        filterA = findViewById(R.id.foodfiltertypeA);
+        filterB = findViewById(R.id.foodfiltertypeB);
+
+        filterOpen = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.filter_open);
+        filterClose = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.filter_close);
+
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animateFunction();
+            }
+        });
 
         navigationView = findViewById(R.id.navigation_bar);
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -120,6 +139,23 @@ public class FoodPageActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void animateFunction(){
+        if(isOpen){
+            filterA.startAnimation(filterClose);
+            filterB.startAnimation(filterClose);
+            filterA.setClickable(false);
+            filterB.setClickable(false);
+            isOpen=false;
+        }
+        else{
+            filterA.startAnimation(filterOpen);
+            filterB.startAnimation(filterOpen);
+            filterA.setClickable(true);
+            filterB.setClickable(true);
+            isOpen=true;
+        }
     }
 
     public void insertFoodList(String prefix){
