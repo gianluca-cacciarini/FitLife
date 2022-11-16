@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,7 +48,8 @@ public class FoodPageActivity extends AppCompatActivity {
     private User user;
     private BottomNavigationView navigationView;
 
-    private FloatingActionButton filter,filterA,filterB;
+    private FloatingActionButton filter;
+    private ExtendedFloatingActionButton filterA,filterB,filterC;
     private Animation filterOpen, filterClose;
     private Boolean isOpen = false;
 
@@ -75,6 +77,28 @@ public class FoodPageActivity extends AppCompatActivity {
         filter = findViewById(R.id.foodfilter);
         filterA = findViewById(R.id.foodfiltertypeA);
         filterB = findViewById(R.id.foodfiltertypeB);
+        filterC = findViewById(R.id.foodfiltertypeC);
+
+        filterA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FoodPageActivity.this, "Filter A", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        filterB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FoodPageActivity.this, "Filter B", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        filterC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FoodPageActivity.this, "Filter C", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         filterOpen = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.filter_open);
         filterClose = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.filter_close);
@@ -145,15 +169,19 @@ public class FoodPageActivity extends AppCompatActivity {
         if(isOpen){
             filterA.startAnimation(filterClose);
             filterB.startAnimation(filterClose);
+            filterC.startAnimation(filterClose);
             filterA.setClickable(false);
             filterB.setClickable(false);
+            filterC.setClickable(false);
             isOpen=false;
         }
         else{
             filterA.startAnimation(filterOpen);
             filterB.startAnimation(filterOpen);
+            filterC.startAnimation(filterOpen);
             filterA.setClickable(true);
             filterB.setClickable(true);
+            filterC.setClickable(true);
             isOpen=true;
         }
     }
