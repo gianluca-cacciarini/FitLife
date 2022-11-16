@@ -82,7 +82,10 @@ public class FoodPageActivity extends AppCompatActivity {
         filterA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(FoodPageActivity.this, "Filter A", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FoodPageActivity.this, "Filter remove", Toast.LENGTH_SHORT).show();
+                food_list = new ArrayList<Food>();
+                food_name_list = new ArrayList<String>();
+                insertFilteredFoodList("");
             }
         });
 
@@ -90,6 +93,9 @@ public class FoodPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(FoodPageActivity.this, "Filter B", Toast.LENGTH_SHORT).show();
+                food_list = new ArrayList<Food>();
+                food_name_list = new ArrayList<String>();
+                insertFilteredFoodList("catB");
             }
         });
 
@@ -97,6 +103,9 @@ public class FoodPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(FoodPageActivity.this, "Filter C", Toast.LENGTH_SHORT).show();
+                food_list = new ArrayList<Food>();
+                food_name_list = new ArrayList<String>();
+                insertFilteredFoodList("catC");
             }
         });
 
@@ -186,9 +195,30 @@ public class FoodPageActivity extends AppCompatActivity {
         }
     }
 
+    public void insertFilteredFoodList(String category){
+        category = category.toLowerCase();
+        for( String key : user.getFood_list().keySet()){
+            if(category.equals("")){
+                food_list.add(user.getFood_list().get(key));
+                food_name_list.add(user.getFood_list().get(key).getName());
+            }
+            else if(user.getFood_list().get(key).getCategory().toLowerCase().equals(category)){
+                food_list.add(user.getFood_list().get(key));
+                food_name_list.add(user.getFood_list().get(key).getName());
+            }
+        }
+        myAdapterFood = new MyAdapterFood(getApplicationContext(),food_list);
+        recyclerView.setAdapter(myAdapterFood);
+        myAdapterFood.notifyDataSetChanged();
+        Log.d("debug","notifydatasethaschanged");
+        Log.d("debug",food_name_list.toString());
+        Log.d("debug",food_list.toString());
+    }
+
     public void insertFoodList(String prefix){
         prefix = prefix.toLowerCase();
         for( String key : user.getFood_list().keySet()){
+            Log.d("debug",user.getFood_list().get(key).getCategory());
             if(prefix.equals("")) {
                 food_list.add(user.getFood_list().get(key));
                 food_name_list.add(user.getFood_list().get(key).getName());
