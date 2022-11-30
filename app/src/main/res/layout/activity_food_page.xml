@@ -78,7 +78,7 @@
         android:layout_marginBottom="4dp"
         android:backgroundTint="@color/green"
         android:text="fish"
-        app:icon="@drawable/football"
+        app:icon="@drawable/fish"
         app:layout_constraintBottom_toTopOf="@+id/foodfiltertypeC"
         app:layout_constraintEnd_toEndOf="@+id/foodfilter"
         android:visibility="invisible" />
@@ -92,7 +92,7 @@
         android:backgroundTint="@color/green"
         android:text="meat"
         android:textAlignment="center"
-        app:icon="@drawable/cookie"
+        app:icon="@drawable/meat"
         app:layout_constraintBottom_toTopOf="@+id/foodfilter"
         app:layout_constraintEnd_toEndOf="@+id/foodfilter"
         android:visibility="invisible" />

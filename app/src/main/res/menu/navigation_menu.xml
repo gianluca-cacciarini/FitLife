@@ -7,15 +7,15 @@
         android:title="Step" />
     <item
         android:id="@+id/bottom_food"
-        android:icon="@drawable/food"
+        android:icon="@drawable/cutlery"
         android:title="Food" />
     <item
         android:id="@+id/bottom_diary"
-        android:icon="@drawable/diary"
+        android:icon="@drawable/diary2"
         android:title="Diary" />
     <item
         android:id="@+id/bottom_exercise"
-        android:icon="@drawable/football"
+        android:icon="@drawable/fitness"
         android:title="Exercise" />
     <item
         android:id="@+id/bottom_user"
