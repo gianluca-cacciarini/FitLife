@@ -109,6 +109,14 @@ public class User {
         return res;
     }
 
+    public void addDay(Day new_day){
+        if (this.diary == null){
+            this.diary = new HashMap<String,Day>();
+        }
+        //cant put only the date as string otherwise i will not be able to have more item in the same day
+        this.diary.put(new_day.date+new_day.food_name+new_day.exercise_name,new_day);
+    }
+
     public void addExercise(Exercise new_exercise){
         if (this.exercise_list == null){
             this.exercise_list = new HashMap<String,Exercise>();

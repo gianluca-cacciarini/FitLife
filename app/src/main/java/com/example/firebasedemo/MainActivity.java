@@ -11,9 +11,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -33,8 +30,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,22 +46,27 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
 
-    private TextView debug;
-    private Button logout,add;
-    private EditText edit;
-
     private RecyclerView recyclerView;
     private MyAdapterDiary myAdapterDiary;
-    private ArrayList<Food> food_list = new ArrayList<Food>();
+    private HashMap<String,Food> food_list = new HashMap<String,Food>();
+    private HashMap<String,Exercise> exercise_list = new HashMap<String,Exercise>();
+    private ArrayList<Day> diary = new ArrayList<Day>();
 
     private User user;
 
     private BottomNavigationView navigationView;
 
+    private Button test_button;
+    private String currentDay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
+        currentDay = df.format(currentTime);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
@@ -70,16 +77,12 @@ public class MainActivity extends AppCompatActivity {
 
         getUser();
 
-        logout = findViewById(R.id.logout);
-        edit = findViewById(R.id.edit);
-        add = findViewById(R.id.add);
-        debug = findViewById(R.id.debug_main);
-        debug.setText("DEBUG");
-
         recyclerView = findViewById(R.id.diary_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        food_list = new ArrayList<Food>();
-        myAdapterDiary = new MyAdapterDiary(getApplicationContext(),food_list);
+        food_list = new HashMap<String,Food>();
+        exercise_list = new HashMap<String,Exercise>();
+        diary = new ArrayList<Day>();
+        myAdapterDiary = new MyAdapterDiary(getApplicationContext(),food_list,exercise_list,diary);
         recyclerView.setAdapter(myAdapterDiary);
 
         navigationView = findViewById(R.id.navigation_bar);
@@ -114,35 +117,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        logout.setOnClickListener(new View.OnClickListener() {
+        test_button = findViewById(R.id.test_button);
+        test_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("debug","MainActivity 1");
-                signOut();
-            }
-        });
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String txt_name = edit.getText().toString();
-                if (txt_name.isEmpty()){
-                    Toast.makeText(MainActivity.this, "No name entered!", Toast.LENGTH_SHORT).show();
-                } else {
-                    FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("ProgrammingK").push().child("Name").setValue(txt_name);
-                }
+                Log.d("deubg","diary size: "+String.valueOf(user.getDiary().size()));
+                Day new_d = new Day(currentDay,"curl",1,2);
+                user.addDay(new_d);
+                updateUser();
             }
         });
     }
 
-    public void insertFoodList(){
-        for( String key : user.getFood_list().keySet()){
-            food_list.add(user.getFood_list().get(key));
+    public void insertDiary(){
+        diary.clear();
+        for( String key : user.getDiary().keySet()){
+            //Log.d("debug",currentDay+" vs "+user.getDiary().get(key).getDate());
+            if(user.getDiary().get(key).getDate().equals(currentDay)) {
+                diary.add(user.getDiary().get(key));
+            }
+            Log.d("debug",diary.toString());
         }
-        Collections.sort(food_list);
-        //Collections.sort(food_name_list);
-        myAdapterDiary.notifyDataSetChanged();
+        Log.d("debug","size diary: "+String.valueOf(diary.size()));
+        Collections.sort(diary);
     }
 
     public void getUser(){
@@ -151,8 +148,20 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot snapshot = task.getResult();
                 user = snapshot.getValue(User.class);
-                //getAllImages();
-                insertFoodList();
+                food_list = user.getFood_list();
+                exercise_list = user.getExercise_list();
+                insertDiary();
+                myAdapterDiary = new MyAdapterDiary(getApplicationContext(),food_list,exercise_list,diary);
+                recyclerView.setAdapter(myAdapterDiary);
+            }
+        });
+    }
+
+    public void updateUser(){
+        mDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                getUser();
             }
         });
     }
