@@ -8,6 +8,36 @@
     tools:context=".MainActivity"
     android:background="@color/white">
 
+    <TextView
+        android:id="@+id/total_cal_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/total_fat_txt" />
+
+    <TextView
+        android:id="@+id/total_fat_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/total_prot_txt" />
+
+    <TextView
+        android:id="@+id/total_prot_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/total_carb_txt" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/diary_view"
         android:layout_width="match_parent"
@@ -30,14 +60,15 @@
         app:itemTextColor="@color/black"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
+        android:id="@+id/add_diary_button"
         app:layout_constraintBottom_toBottomOf="@+id/diary_view"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:srcCompat="@drawable/pen"
-        android:scaleType="fitXY"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/blue"
+        android:tint="@color/green"
+        app:srcCompat="@drawable/plus"
+        app:borderWidth="0dp"/>
 
     <Button
         android:id="@+id/test_button"
@@ -46,6 +77,16 @@
         android:text="Button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/total_carb_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/test_button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

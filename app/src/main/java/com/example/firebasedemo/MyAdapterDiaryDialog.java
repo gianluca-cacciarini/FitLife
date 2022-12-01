@@ -16,36 +16,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
-public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHolder>{
+public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDialog.MyViewHolder>{
 
     Context context;
-    HashMap<String,Food> food_list;
-    HashMap<String,Exercise> exercise_list;
-    ArrayList<Day> diary;
+    ArrayList<Food> food_list;
+    ArrayList<Exercise> exercise_list;
+    Integer filter;
 
     @NonNull
     @Override
-    public MyAdapterDiary.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyAdapterDiaryDialog.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.diary_item,parent,false);
-        return new MyViewHolder(view);
+        return new MyAdapterDiaryDialog.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyAdapterDiary.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyAdapterDiaryDialog.MyViewHolder holder, int position) {
         Log.d("debug","position: "+String.valueOf(position));
-
-        Day day = diary.get(position);
-        if(day.getOr()==0){
-            holder.layout.setBackgroundColor(Color.BLUE);
-            Food food = food_list.get(day.getFood_name());
+        if(this.filter==0){
+            holder.layout.setBackgroundColor(Color.GRAY);
+            Food food = this.food_list.get(position);
             holder.name.setText(food.getName());
             holder.category.setText(food.getCategory());
             holder.carb.setText(String.valueOf(food.getCarb()));
@@ -53,21 +47,16 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             holder.fat.setText(String.valueOf(food.getFat()));
             holder.cal.setText(String.valueOf(food.getCal()));
             Glide.with(context).load(Uri.parse(food.getImageurl())).into(holder.image);
-            holder.quant.setText(String.valueOf(day.getQuantity()));
-
-
 
             holder.set.setVisibility(View.INVISIBLE);
             holder.rep.setVisibility(View.INVISIBLE);
         }
         else{
-            holder.layout.setBackgroundColor(Color.GREEN);
-            Exercise exercise = exercise_list.get(day.getExercise_name());
+            holder.layout.setBackgroundColor(Color.GRAY);
+            Exercise exercise = exercise_list.get(position);
             holder.name.setText(exercise.getName());
             holder.category.setText(exercise.getCategory());
             Glide.with(context).load(Uri.parse(exercise.getImageurl())).into(holder.image);
-            holder.set.setText(String.valueOf(day.getSet()));
-            holder.rep.setText(String.valueOf((day.getRep())));
 
             holder.quant.setVisibility(View.INVISIBLE);
             holder.carb.setVisibility(View.INVISIBLE);
@@ -80,7 +69,10 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
 
     @Override
     public int getItemCount() {
-        return diary.size();
+        if(this.filter==0){
+            return food_list.size();
+        }
+        else return exercise_list.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -109,11 +101,11 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
         }
     }
 
-    public MyAdapterDiary(Context context, HashMap<String,Food> food_list, HashMap<String,Exercise> exercise_list, ArrayList<Day> diary) {
+    public MyAdapterDiaryDialog(Context context, ArrayList<Food> food_list, ArrayList<Exercise> exercise_list, Integer filter) {
         this.context = context;
         this.food_list = food_list;
         this.exercise_list = exercise_list;
-        this.diary = diary;
+        this.filter = filter;
     }
 
 }
