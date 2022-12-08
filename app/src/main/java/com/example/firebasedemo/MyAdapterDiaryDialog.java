@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,17 +22,26 @@ import java.util.HashMap;
 
 public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDialog.MyViewHolder>{
 
+    OnItemClickListener mlistener;
     Context context;
     ArrayList<Food> food_list;
     ArrayList<Exercise> exercise_list;
     Integer filter;
 
+    public interface OnItemClickListener {
+        void onItemClick(int position, View view);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mlistener = listener;
+    }
+
     @NonNull
     @Override
     public MyAdapterDiaryDialog.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.diary_item,parent,false);
-        return new MyAdapterDiaryDialog.MyViewHolder(view);
+        View view = inflater.inflate(R.layout.dialog_item,parent,false);
+        return new MyAdapterDiaryDialog.MyViewHolder(view,mlistener);
     }
 
     @Override
@@ -58,7 +68,7 @@ public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDia
             holder.category.setText(exercise.getCategory());
             Glide.with(context).load(Uri.parse(exercise.getImageurl())).into(holder.image);
 
-            holder.quant.setVisibility(View.INVISIBLE);
+            //holder.quant.setVisibility(View.INVISIBLE);
             holder.carb.setVisibility(View.INVISIBLE);
             holder.prot.setVisibility(View.INVISIBLE);
             holder.fat.setVisibility(View.INVISIBLE);
@@ -83,21 +93,32 @@ public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDia
         ImageView image;
         ConstraintLayout layout;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
-            name = itemView.findViewById(R.id.nameDiary);
-            category = itemView.findViewById(R.id.categoryDiary);
-            carb = itemView.findViewById(R.id.carbDiary);
-            prot = itemView.findViewById(R.id.protDiary);
-            fat = itemView.findViewById(R.id.fatDiary);
-            cal = itemView.findViewById(R.id.calDiary);
-            image = itemView.findViewById(R.id.imageDiary);
-            set = itemView.findViewById(R.id.setDiary);
-            rep = itemView.findViewById(R.id.repDiary);
-            quant = itemView.findViewById(R.id.testA);
-            layout = itemView.findViewById(R.id.diary_item_layout);
+            name = itemView.findViewById(R.id.nameDialog);
+            category = itemView.findViewById(R.id.categoryDialog);
+            carb = itemView.findViewById(R.id.carbDialog);
+            prot = itemView.findViewById(R.id.protDialog);
+            fat = itemView.findViewById(R.id.fatDialog);
+            cal = itemView.findViewById(R.id.calDialog);
+            image = itemView.findViewById(R.id.imageDialog);
+            set = itemView.findViewById(R.id.setDialog);
+            rep = itemView.findViewById(R.id.repDialog);
+            //quant = itemView.findViewById(R.id.testA);
+            layout = itemView.findViewById(R.id.dialog_item_layout);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mlistener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            mlistener.onItemClick(position,itemView);
+                        }
+                    }
+                }
+            });
         }
     }
 

@@ -8,6 +8,7 @@
     android:backgroundTint="@color/red">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialog_item_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="5dp"
@@ -16,7 +17,7 @@
         android:paddingRight="5dp">
 
         <ImageView
-            android:id="@+id/imageFood"
+            android:id="@+id/imageDialog"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="fitXY"
@@ -27,75 +28,85 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/nameFood"
+            android:id="@+id/nameDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Name"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageFood"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.146" />
+            app:layout_constraintStart_toEndOf="@+id/imageDialog"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/categoryFood"
+            android:id="@+id/categoryDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageFood"
-            app:layout_constraintTop_toBottomOf="@+id/nameFood"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toEndOf="@+id/imageDialog"
+            app:layout_constraintTop_toBottomOf="@+id/nameDialog" />
 
         <TextView
-            android:id="@+id/carbFood"
+            android:id="@+id/carbDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CARB"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageFood"
-            app:layout_constraintTop_toBottomOf="@+id/categoryFood" />
+            app:layout_constraintStart_toEndOf="@+id/imageDialog"
+            app:layout_constraintTop_toBottomOf="@+id/categoryDialog" />
 
         <TextView
-            android:id="@+id/protFood"
+            android:id="@+id/setDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SET"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/imageDialog"
+            app:layout_constraintTop_toBottomOf="@+id/categoryDialog" />
+
+        <TextView
+            android:id="@+id/protDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PROT"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/carbFood"
-            app:layout_constraintTop_toTopOf="@+id/carbFood" />
+            app:layout_constraintStart_toEndOf="@+id/carbDialog"
+            app:layout_constraintTop_toTopOf="@+id/carbDialog" />
 
         <TextView
-            android:id="@+id/fatFood"
+            android:id="@+id/repDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REP"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/carbDialog"
+            app:layout_constraintTop_toTopOf="@+id/carbDialog" />
+
+        <TextView
+            android:id="@+id/fatDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="FAT"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/protFood"
-            app:layout_constraintTop_toTopOf="@+id/protFood" />
+            app:layout_constraintStart_toEndOf="@+id/protDialog"
+            app:layout_constraintTop_toTopOf="@+id/protDialog" />
 
         <TextView
-            android:id="@+id/calFood"
+            android:id="@+id/calDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CAL"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/fatFood"
-            app:layout_constraintTop_toTopOf="@+id/fatFood" />
+            app:layout_constraintStart_toEndOf="@+id/fatDialog"
+            app:layout_constraintTop_toTopOf="@+id/fatDialog" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

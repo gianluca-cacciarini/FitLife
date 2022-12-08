@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
     private MyAdapterDiaryDialog myAdapterDiaryDialog;
     private ArrayList<Food> dialog_food_list = new ArrayList<Food>();
     private ArrayList<Exercise> dialog_exercise_list = new ArrayList<Exercise>();
+    private ArrayList<Food> diary_food_list = new ArrayList<Food>();
+    private ArrayList<Exercise> diary_exercise_list = new ArrayList<Exercise>();
 
 
     @Override
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("debug","dialog");
-                buildDialogRecyclerWiew();
+                buildDialogRecyclerView();
                 add_dialog.show();
             }
         });
@@ -210,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void buildDialogRecyclerWiew(){
+    public void buildDialogRecyclerView(){
         if( dialog_food_list.size() != food_list.size()){
             dialog_food_list.clear();
             for( String key : food_list.keySet()){
@@ -227,6 +229,93 @@ public class MainActivity extends AppCompatActivity {
         }
         myAdapterDiaryDialog = new MyAdapterDiaryDialog(getApplicationContext(),dialog_food_list,dialog_exercise_list,dialog_filter);
         recyclerViewDialog.setAdapter(myAdapterDiaryDialog);
+
+        myAdapterDiaryDialog.setOnItemClickListener(new MyAdapterDiaryDialog.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                if(dialog_filter==0){
+                    Food f = dialog_food_list.get(position);
+                    Toast.makeText(MainActivity.this, String.valueOf(position)+" "+f.getName(), Toast.LENGTH_SHORT).show();
+                    Day new_d = new Day(currentDay,f.getName(),100);
+                    user.addDay(new_d);
+                    updateUser();
+                }
+                else{
+                    Exercise e = dialog_exercise_list.get(position);
+                    Toast.makeText(MainActivity.this, String.valueOf(position)+" "+e.getName(), Toast.LENGTH_SHORT).show();
+                    Day new_d = new Day(currentDay,e.getName(),1,2);
+                    user.addDay(new_d);
+                    updateUser();
+                }
+            }
+        });
+    }
+
+    public void buildRecyclerWiew(){
+        diary_food_list.clear();
+        for( String key : user.getDiary().keySet()){
+            if (user.getDiary().get(key).getDate().equals(currentDay) && user.getDiary().get(key).getOr()==0){
+                String foodname = user.getDiary().get(key).getFood_name();
+                diary_food_list.add(food_list.get(foodname));
+            }
+        }
+        Collections.sort(diary_food_list);
+
+        diary_exercise_list.clear();
+        for( String key : user.getDiary().keySet()){
+            if (user.getDiary().get(key).getDate().equals(currentDay) && user.getDiary().get(key).getOr()==1){
+                String exercisename = user.getDiary().get(key).getExercise_name();
+                diary_exercise_list.add(exercise_list.get(exercisename));
+            }
+        }
+        Collections.sort(diary_food_list);
+
+        myAdapterDiary = new MyAdapterDiary(getApplicationContext(),food_list,exercise_list,diary);
+        recyclerViewDiary.setAdapter(myAdapterDiary);
+
+        myAdapterDiary.setOnItemClickListener(new MyAdapterDiary.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                if(position<diary_food_list.size()){
+                    Food f = diary_food_list.get(position);
+                    Toast.makeText(MainActivity.this, String.valueOf(position)+" "+f.getName(), Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Exercise e = diary_exercise_list.get(position-diary_food_list.size());
+                    Toast.makeText(MainActivity.this, String.valueOf(position-diary_food_list.size())+" "+e.getName(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onDeleteClick(int position, View view) {
+                if(position<diary_food_list.size()){
+                    Food f = diary_food_list.get(position);
+                    Toast.makeText(MainActivity.this, String.valueOf(position)+" "+f.getName()+" DELETE", Toast.LENGTH_SHORT).show();
+                    Day old_d = new Day(currentDay,f.getName(),100);
+                    user.deleteDay(old_d);
+                    updateUser();
+                }
+                else{
+                    Exercise e = diary_exercise_list.get(position-diary_food_list.size());
+                    Toast.makeText(MainActivity.this, String.valueOf(position-diary_food_list.size())+" "+e.getName()+" DELETE", Toast.LENGTH_SHORT).show();
+                    Day old_d = new Day(currentDay,e.getName(),1,2);
+                    user.deleteDay(old_d);
+                    updateUser();
+                }
+            }
+
+            @Override
+            public void onModifyClick(int position, View view) {
+                if(position<diary_food_list.size()){
+                    Food f = diary_food_list.get(position);
+                    Toast.makeText(MainActivity.this, String.valueOf(position)+" "+f.getName()+" MODIFY", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Exercise e = diary_exercise_list.get(position-diary_food_list.size());
+                    Toast.makeText(MainActivity.this, String.valueOf(position-diary_food_list.size())+" "+e.getName()+" MODIFY", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void setDialogFilter(){
@@ -235,14 +324,14 @@ public class MainActivity extends AppCompatActivity {
             //dialog_exercise_btn.setBackgroundColor(getResources().getColor(R.color.dialog));
             dialog_food_btn.setColorFilter(getResources().getColor(R.color.celeste));
             dialog_exercise_btn.setColorFilter(getResources().getColor(R.color.black));
-            buildDialogRecyclerWiew();
+            buildDialogRecyclerView();
         }
         else {
             //dialog_exercise_btn.setBackgroundColor(getResources().getColor(R.color.celeste));
             //dialog_food_btn.setBackgroundColor(getResources().getColor(R.color.dialog));
             dialog_exercise_btn.setColorFilter(getResources().getColor(R.color.celeste));
             dialog_food_btn.setColorFilter(getResources().getColor(R.color.black));
-            buildDialogRecyclerWiew();
+            buildDialogRecyclerView();
         }
     }
 
@@ -295,8 +384,7 @@ public class MainActivity extends AppCompatActivity {
                 food_list = user.getFood_list();
                 exercise_list = user.getExercise_list();
                 insertDiary();
-                myAdapterDiary = new MyAdapterDiary(getApplicationContext(),food_list,exercise_list,diary);
-                recyclerViewDiary.setAdapter(myAdapterDiary);
+                buildRecyclerWiew();
             }
         });
     }

@@ -117,6 +117,11 @@ public class User {
         this.diary.put(new_day.date+new_day.food_name+new_day.exercise_name,new_day);
     }
 
+    public void deleteDay(Day old_day){
+        if (this.diary == null) return;
+        diary.remove(old_day.date+old_day.food_name+old_day.exercise_name);
+    }
+
     public void addExercise(Exercise new_exercise){
         if (this.exercise_list == null){
             this.exercise_list = new HashMap<String,Exercise>();

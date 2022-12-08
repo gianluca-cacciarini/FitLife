@@ -17,6 +17,28 @@
         android:paddingRight="5dp">
 
         <ImageView
+            android:id="@+id/delete_item_diary"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toEndOf="@+id/modify_item_diary"
+            app:layout_constraintTop_toTopOf="@+id/modify_item_diary"
+            android:background="@drawable/delete"
+            android:backgroundTint="@color/red" />
+
+        <ImageView
+            android:id="@+id/modify_item_diary"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            app:layout_constraintStart_toEndOf="@+id/testA"
+            app:layout_constraintTop_toTopOf="@+id/nameDiary"
+            android:background="@drawable/pen"
+            android:backgroundTint="@color/green" />
+
+
+        <ImageView
             android:id="@+id/imageDiary"
             android:layout_width="100dp"
             android:layout_height="100dp"

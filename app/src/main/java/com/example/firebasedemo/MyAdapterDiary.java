@@ -25,17 +25,28 @@ import java.util.Locale;
 
 public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHolder>{
 
+    MyAdapterDiary.OnItemClickListener mlistener;
     Context context;
     HashMap<String,Food> food_list;
     HashMap<String,Exercise> exercise_list;
     ArrayList<Day> diary;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, View view);
+        void onDeleteClick(int position, View view);
+        void onModifyClick(int position, View view);
+    }
+
+    public void setOnItemClickListener(MyAdapterDiary.OnItemClickListener listener){
+        mlistener = listener;
+    }
 
     @NonNull
     @Override
     public MyAdapterDiary.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.diary_item,parent,false);
-        return new MyViewHolder(view);
+        return new MyAdapterDiary.MyViewHolder(view,mlistener);
     }
 
     @Override
@@ -43,6 +54,7 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
         Log.d("debug","position: "+String.valueOf(position));
 
         Day day = diary.get(position);
+        holder.or = day.getOr();
         if(day.getOr()==0){
             holder.layout.setBackgroundColor(Color.BLUE);
             Food food = food_list.get(day.getFood_name());
@@ -54,7 +66,10 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             holder.cal.setText(String.valueOf(food.getCal()));
             Glide.with(context).load(Uri.parse(food.getImageurl())).into(holder.image);
             holder.quant.setText(String.valueOf(day.getQuantity()));
-
+            holder.delete.setColorFilter(Color.GRAY);
+            holder.modify.setColorFilter(Color.GRAY);
+            holder.modify.setVisibility(View.VISIBLE);
+            holder.delete.setVisibility(View.VISIBLE);
 
 
             holder.set.setVisibility(View.INVISIBLE);
@@ -68,6 +83,11 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             Glide.with(context).load(Uri.parse(exercise.getImageurl())).into(holder.image);
             holder.set.setText(String.valueOf(day.getSet()));
             holder.rep.setText(String.valueOf((day.getRep())));
+
+            holder.delete.setColorFilter(Color.GRAY);
+            holder.modify.setColorFilter(Color.GRAY);
+            holder.modify.setVisibility(View.VISIBLE);
+            holder.delete.setVisibility(View.VISIBLE);
 
             holder.quant.setVisibility(View.INVISIBLE);
             holder.carb.setVisibility(View.INVISIBLE);
@@ -88,10 +108,11 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
         TextView name,category;
         TextView carb,prot,fat,cal;
         TextView set,rep,quant;
-        ImageView image;
+        ImageView image, delete, modify;
         ConstraintLayout layout;
+        int or;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, MyAdapterDiary.OnItemClickListener listener) {
             super(itemView);
 
             name = itemView.findViewById(R.id.nameDiary);
@@ -105,6 +126,44 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             rep = itemView.findViewById(R.id.repDiary);
             quant = itemView.findViewById(R.id.testA);
             layout = itemView.findViewById(R.id.diary_item_layout);
+            delete = itemView.findViewById(R.id.delete_item_diary);
+            modify = itemView.findViewById(R.id.modify_item_diary);
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mlistener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            mlistener.onDeleteClick(position,itemView);
+                        }
+                    }
+                }
+            });
+
+            modify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mlistener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            mlistener.onModifyClick(position,itemView);
+                        }
+                    }
+                }
+            });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mlistener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            mlistener.onItemClick(position,itemView);
+                        }
+                    }
+                }
+            });
 
         }
     }
