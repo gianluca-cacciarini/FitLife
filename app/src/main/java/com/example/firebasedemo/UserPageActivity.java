@@ -39,6 +39,8 @@ public class UserPageActivity extends AppCompatActivity {
     private StorageReference mStorageReference;
     private TextView logout;
     private User user;
+    private TextView full_name;
+    private String string;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +54,10 @@ public class UserPageActivity extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        getUser();
         logout = findViewById(R.id.logout_settings);
+        full_name = findViewById(R.id.fname_text);
+        getUser();
+
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +163,8 @@ public class UserPageActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot snapshot = task.getResult();
                 user = snapshot.getValue(User.class);
+                string = user.getFull_name();
+                full_name.setText(string);
                 //getAllImages();
                 //insertFoodList();
             }

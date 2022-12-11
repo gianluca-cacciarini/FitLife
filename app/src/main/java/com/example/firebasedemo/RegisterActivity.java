@@ -24,9 +24,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
+    private EditText full_name;
     private Button signup;
     String txt_email;
     String txt_password;
+    String txt_full_name;
 
     private FirebaseAuth mfirebaseAuth;
     @Override
@@ -37,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         signup = findViewById(R.id.signup);
+        full_name = findViewById(R.id.name);
 
         mfirebaseAuth = FirebaseAuth.getInstance();
 
@@ -45,8 +48,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 txt_email = email.getText().toString();
                 txt_password = password.getText().toString();
+                txt_full_name = full_name.getText().toString();
 
-                if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
+                if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_full_name)){
                     Toast.makeText(RegisterActivity.this, "Empty credentials!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(RegisterActivity.this , RegisterActivity.class));
                     finish();
@@ -109,6 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("EMAIL", txt_email);
         editor.putString("PASS", txt_password);
+        editor.putString("FULL_NAME", txt_full_name);
         editor.apply();
     }
 
@@ -116,5 +121,6 @@ public class RegisterActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("ALL_ACTIVITY", MODE_PRIVATE);
         txt_email = sharedPreferences.getString("EMAIL", "none");
         txt_password = sharedPreferences.getString("PASS", "none");
+        txt_full_name = sharedPreferences.getString("FULL_NAME", "none");
     }
 }

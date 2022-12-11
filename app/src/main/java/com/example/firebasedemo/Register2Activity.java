@@ -35,6 +35,7 @@ public class Register2Activity extends AppCompatActivity {
     private int gender = -1;
     private String txt_email;
     private String txt_password;
+    private String txt_full_name;
     private User user;
     private CheckBox male, female;
 
@@ -62,6 +63,8 @@ public class Register2Activity extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
         mFirebaseAuth = FirebaseAuth.getInstance();
         loadData();
+
+        //Toast.makeText(Register2Activity.this, txt_full_name, Toast.LENGTH_SHORT).show();
 
         male = findViewById(R.id.male);
         female = findViewById(R.id.female);
@@ -102,6 +105,7 @@ public class Register2Activity extends AppCompatActivity {
                 } else {
                     user = new User();
                     //user.setName(mFirebaseAuth.getCurrentUser().getEmail());
+                    user.setFull_name("Mario Rossi");
                     user.setPassword("google_user");
                     user.setCal_goal(parseInt(cal_str));
                     user.setCarb_goal(parseInt(carb_str));
@@ -116,7 +120,7 @@ public class Register2Activity extends AppCompatActivity {
                         insertExercises();
                     }
                     else{
-                        registerUser(txt_email, txt_password);
+                        registerUser(txt_email, txt_password, txt_full_name);
                     }
 
                 }
@@ -124,7 +128,7 @@ public class Register2Activity extends AppCompatActivity {
         });
     }
 
-    private void registerUser(String email, String password) {
+    private void registerUser(String email, String password, String full_name) {
         mFirebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(Register2Activity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -132,6 +136,7 @@ public class Register2Activity extends AppCompatActivity {
                     Toast.makeText(Register2Activity.this, "Registering user successful!", Toast.LENGTH_SHORT).show();
                     user.setName(mFirebaseAuth.getCurrentUser().getEmail());
                     user.setPassword("default_user");
+                    user.setFull_name(full_name);
                     insertFoods();
                     insertExercises();
                 } else {
@@ -219,6 +224,7 @@ public class Register2Activity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("EMAIL", txt_email);
         editor.putString("PASS", txt_password);
+        editor.putString("FULL_NAME", txt_full_name);
         editor.apply();
     }
 
@@ -226,5 +232,6 @@ public class Register2Activity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("ALL_ACTIVITY", MODE_PRIVATE);
         txt_email = sharedPreferences.getString("EMAIL", "none");
         txt_password = sharedPreferences.getString("PASS", "none");
+        txt_full_name = sharedPreferences.getString("FULL_NAME", "none");
     }
 }

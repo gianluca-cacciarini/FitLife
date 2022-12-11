@@ -17,6 +17,7 @@ public class User {
     public int prot_goal;
     public int fat_goal;
     public int cal_goal;
+    public String full_name;
 
     //for each user we want to keep track of the list of all his/her foods and exercises
     //and we want to keep track of his/her diary
@@ -28,6 +29,7 @@ public class User {
 
     public User() {
         super();
+        full_name = "dummy";
         name = "dummy";
         password = "none";
         food_list = new HashMap<String,Food>();
@@ -42,7 +44,7 @@ public class User {
         cal_goal = 0;
     }
 
-    public User(String email, String password,
+    public User(String email, String password, String full_name,
                 int sex, int weight, int height, int carb_goal, int prot_goal, int fat_goal, int cal_goal,
                  HashMap<String, Food> food_list, HashMap<String, Exercise> exercise_list, HashMap<String, Day> diary, HashMap<String,Step> step_list) {
         this.name = email;
@@ -58,9 +60,10 @@ public class User {
         this.exercise_list = exercise_list;
         this.diary = diary;
         this.step_list = step_list;
+        this.full_name = full_name;
     }
 
-    public User(String email, String password, int sex, int weight, int height, int carb_goal, int prot_goal, int fat_goal, int cal_goal) {
+    public User(String email, String password, String full_name, int sex, int weight, int height, int carb_goal, int prot_goal, int fat_goal, int cal_goal) {
         this.name = email;
         this.password = password;
         this.sex = sex;
@@ -73,6 +76,7 @@ public class User {
         this.food_list = new HashMap<String,Food>();
         this.exercise_list = new HashMap<String, Exercise>();
         this.diary = new HashMap<String,Day>();
+        this.full_name = full_name;
     }
 
     @Override
@@ -145,6 +149,14 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getFull_name() {
+        return full_name;
+    }
+
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
 
     public void setName(String name) {
