@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +46,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +55,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
@@ -86,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Food> diary_food_list = new ArrayList<Food>();
     private ArrayList<Exercise> diary_exercise_list = new ArrayList<Exercise>();
 
+    private Button calendar;
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -103,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
         return super.dispatchTouchEvent( event );
     }
 
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         Date currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
         currentDay = df.format(currentTime);
+        calendar = findViewById(R.id.calendarbutton);
         total_carb_text = findViewById(R.id.total_carb_txt);
         total_prot_text = findViewById(R.id.total_prot_txt);
         total_fat_text = findViewById(R.id.total_fat_txt);
@@ -165,16 +175,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        test_button = findViewById(R.id.test_button);
-        test_button.setOnClickListener(new View.OnClickListener() {
+        calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Log.d("deubg","diary size: "+String.valueOf(user.getDiary().size()));
-                //Day new_d = new Day(currentDay,"curl",1,2);
-                //user.addDay(new_d);
-                updateUser();
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getFragmentManager(), "date picker");
             }
         });
+        calendar.setText(currentDay);
 
         add_dialog =new Dialog(this);
         add_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -411,6 +419,10 @@ public class MainActivity extends AppCompatActivity {
     public void insertDiary(){
         diary.clear();
         total_carb = 0; total_prot = 0; total_fat = 0; total_cal = 0;
+        total_carb_text.setText("0");
+        total_prot_text.setText("0");
+        total_fat_text.setText("0");
+        total_cal_text.setText("0");
 
         for( String key : user.getDiary().keySet()){
             //Log.d("debug",currentDay+" vs "+user.getDiary().get(key).getDate());
@@ -504,5 +516,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, i);
+        c.set(Calendar.MONTH, i1);
+        c.set(Calendar.DAY_OF_MONTH, i2);
+        SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
+        currentDay = df.format(c.getTime());
+        calendar.setText(currentDay);
+        insertDiary();
+        buildRecyclerWiew();
+
     }
 }

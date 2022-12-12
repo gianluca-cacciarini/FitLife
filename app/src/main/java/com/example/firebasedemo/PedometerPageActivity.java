@@ -13,6 +13,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -74,7 +75,9 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
             //ask for permission
-            requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+            }
         }
 
         mDatabaseReference = FirebaseDatabase.getInstance("https://fir-demo-5bf06-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("my_app_user");
@@ -152,6 +155,13 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
         //case where this isn't the first i open the app, but it is the first
         //time i open the app today
         else if(!currentDay.equals(lastDay) && !lastDay.equals("none")){
+            Step step = new Step(currentDay,current_steps);
+            if(user!=null) {
+                user.addStep(step);
+                updateUser();
+                getWeekSteps();
+                getMonthSteps();
+            }
             current_steps = 0;
             prev = (int) sensorEvent.values[0];
             lastDay = currentDay;
