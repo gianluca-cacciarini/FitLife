@@ -32,9 +32,8 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
     ArrayList<Day> diary;
 
     public interface OnItemClickListener {
-        void onItemClick(int position, View view);
-        void onDeleteClick(int position, View view);
-        void onModifyClick(int position, View view);
+        void onItemClick(int position, MyAdapterDiary.MyViewHolder v);
+        void onDeleteClick(int position, MyAdapterDiary.MyViewHolder v);
     }
 
     public void setOnItemClickListener(MyAdapterDiary.OnItemClickListener listener){
@@ -67,8 +66,6 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             Glide.with(context).load(Uri.parse(food.getImageurl())).into(holder.image);
             holder.quant.setText(String.valueOf(day.getQuantity()));
             holder.delete.setColorFilter(Color.GRAY);
-            holder.modify.setColorFilter(Color.GRAY);
-            holder.modify.setVisibility(View.VISIBLE);
             holder.delete.setVisibility(View.VISIBLE);
 
 
@@ -85,8 +82,6 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             holder.rep.setText(String.valueOf((day.getRep())));
 
             holder.delete.setColorFilter(Color.GRAY);
-            holder.modify.setColorFilter(Color.GRAY);
-            holder.modify.setVisibility(View.VISIBLE);
             holder.delete.setVisibility(View.VISIBLE);
 
             holder.quant.setVisibility(View.INVISIBLE);
@@ -108,9 +103,10 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
         TextView name,category;
         TextView carb,prot,fat,cal;
         TextView set,rep,quant;
-        ImageView image, delete, modify;
+        ImageView image, delete;
         ConstraintLayout layout;
         int or;
+        MyAdapterDiary.MyViewHolder v = this;
 
         public MyViewHolder(@NonNull View itemView, MyAdapterDiary.OnItemClickListener listener) {
             super(itemView);
@@ -127,7 +123,6 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             quant = itemView.findViewById(R.id.testA);
             layout = itemView.findViewById(R.id.diary_item_layout);
             delete = itemView.findViewById(R.id.delete_item_diary);
-            modify = itemView.findViewById(R.id.modify_item_diary);
 
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -135,19 +130,7 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
                     if (mlistener != null){
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION){
-                            mlistener.onDeleteClick(position,itemView);
-                        }
-                    }
-                }
-            });
-
-            modify.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mlistener != null){
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-                            mlistener.onModifyClick(position,itemView);
+                            mlistener.onDeleteClick(position,v);
                         }
                     }
                 }
@@ -159,7 +142,7 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
                     if (mlistener != null){
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION){
-                            mlistener.onItemClick(position,itemView);
+                            mlistener.onItemClick(position,v);
                         }
                     }
                 }

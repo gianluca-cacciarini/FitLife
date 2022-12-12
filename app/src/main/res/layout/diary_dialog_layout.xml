@@ -64,7 +64,7 @@
     <LinearLayout
         android:id="@+id/header_section3"
         android:layout_width="match_parent"
-        android:layout_height="330dp"
+        android:layout_height="380dp"
         android:layout_marginTop="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -91,7 +91,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible">
 
         <!-- some views -->
         <androidx.appcompat.widget.AppCompatButton
@@ -102,7 +103,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:background="@drawable/custom_button_01"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:clickable="false"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/dialog_ok_btn"
@@ -111,7 +113,8 @@
             android:text="Apply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:background="@drawable/custom_button_01"/>
+            android:background="@drawable/custom_button_01"
+            android:clickable="false"/>
     </LinearLayout>
 
 

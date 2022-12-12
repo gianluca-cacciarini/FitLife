@@ -6,15 +6,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,6 +86,22 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Food> diary_food_list = new ArrayList<Food>();
     private ArrayList<Exercise> diary_exercise_list = new ArrayList<Exercise>();
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         add_dialog =new Dialog(this);
         add_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         add_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        add_dialog.setCanceledOnTouchOutside(false);
+        add_dialog.setCanceledOnTouchOutside(true);
         add_dialog.setContentView(R.layout.diary_dialog_layout);
         dialog_ok = add_dialog.findViewById(R.id.dialog_ok_btn);
         dialog_close = add_dialog.findViewById(R.id.dialog_close_btn);
@@ -216,14 +237,26 @@ public class MainActivity extends AppCompatActivity {
         if( dialog_food_list.size() != food_list.size()){
             dialog_food_list.clear();
             for( String key : food_list.keySet()){
-                dialog_food_list.add(food_list.get(key));
+                Toast.makeText(this, key+" "+user.getDiary().get(currentDay+key), Toast.LENGTH_SHORT).show();
+                if(user.getDiary().get(currentDay+key)!=null){
+                    //dialog_food_list.add(food_list.get(key));
+                }
+                else {
+                    dialog_food_list.add(food_list.get(key));
+                }
             }
             Collections.sort(dialog_food_list);
         }
         if(dialog_exercise_list.size() != exercise_list.size()){
             dialog_exercise_list.clear();
             for( String key : exercise_list.keySet()){
-                dialog_exercise_list.add(exercise_list.get(key));
+                Toast.makeText(this, key+" "+user.getDiary().get(currentDay+key), Toast.LENGTH_SHORT).show();
+                if(user.getDiary().get(currentDay+key)!=null){
+                    //dialog_exercise_list.add(exercise_list.get(key));
+                }
+                else {
+                    dialog_exercise_list.add(exercise_list.get(key));
+                }
             }
             Collections.sort(dialog_exercise_list);
         }
@@ -237,17 +270,37 @@ public class MainActivity extends AppCompatActivity {
                     Food f = dialog_food_list.get(position);
                     Toast.makeText(MainActivity.this, String.valueOf(position)+" "+f.getName(), Toast.LENGTH_SHORT).show();
                     Day new_d = new Day(currentDay,f.getName(),100);
-                    user.addDay(new_d);
-                    updateUser();
+                    //user.addDay(new_d);
+                    //updateUser();
                 }
                 else{
                     Exercise e = dialog_exercise_list.get(position);
                     Toast.makeText(MainActivity.this, String.valueOf(position)+" "+e.getName(), Toast.LENGTH_SHORT).show();
                     Day new_d = new Day(currentDay,e.getName(),1,2);
+                    //user.addDay(new_d);
+                    //updateUser();
+                }
+            }
+
+            @Override
+            public void onQuantityClick(int position, MyAdapterDiaryDialog.MyViewHolder v) {
+                Toast.makeText(MainActivity.this, v.name.getText().toString()+" "+v.number.getText().toString(), Toast.LENGTH_SHORT).show();
+                if(dialog_filter==0){
+                    Food f = dialog_food_list.get(position);
+                    if(v.number.getText().toString().equals("") || v.number.getText().toString().equals("0")) return;
+                    Day new_d = new Day(currentDay,f.getName(),Integer.parseInt(v.number.getText().toString()));
+                    user.addDay(new_d);
+                    updateUser();
+                }
+                else{
+                    Exercise e = dialog_exercise_list.get(position);
+                    if(v.number.getText().toString().equals("") || v.number.getText().toString().equals("0")) return;
+                    Day new_d = new Day(currentDay,e.getName(),1,2);
                     user.addDay(new_d);
                     updateUser();
                 }
             }
+
         });
     }
 
@@ -275,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
 
         myAdapterDiary.setOnItemClickListener(new MyAdapterDiary.OnItemClickListener() {
             @Override
-            public void onItemClick(int position, View view) {
+            public void onItemClick(int position, MyAdapterDiary.MyViewHolder v) {
                 if(position<diary_food_list.size()){
                     Food f = diary_food_list.get(position);
                     Toast.makeText(MainActivity.this, String.valueOf(position)+" "+f.getName(), Toast.LENGTH_SHORT).show();
@@ -287,12 +340,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onDeleteClick(int position, View view) {
+            public void onDeleteClick(int position, MyAdapterDiary.MyViewHolder v) {
                 if(position<diary_food_list.size()){
                     Food f = diary_food_list.get(position);
                     Toast.makeText(MainActivity.this, String.valueOf(position)+" "+f.getName()+" DELETE", Toast.LENGTH_SHORT).show();
-                    Day old_d = new Day(currentDay,f.getName(),100);
+                    Day old_d = new Day(currentDay,f.getName(),Integer.parseInt(v.quant.getText().toString()));
                     user.deleteDay(old_d);
+                    updateMacro(old_d,-1);
                     updateUser();
                 }
                 else{
@@ -300,21 +354,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, String.valueOf(position-diary_food_list.size())+" "+e.getName()+" DELETE", Toast.LENGTH_SHORT).show();
                     Day old_d = new Day(currentDay,e.getName(),1,2);
                     user.deleteDay(old_d);
+                    updateMacro(old_d,-1);
                     updateUser();
                 }
             }
 
-            @Override
-            public void onModifyClick(int position, View view) {
-                if(position<diary_food_list.size()){
-                    Food f = diary_food_list.get(position);
-                    Toast.makeText(MainActivity.this, String.valueOf(position)+" "+f.getName()+" MODIFY", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Exercise e = diary_exercise_list.get(position-diary_food_list.size());
-                    Toast.makeText(MainActivity.this, String.valueOf(position-diary_food_list.size())+" "+e.getName()+" MODIFY", Toast.LENGTH_SHORT).show();
-                }
-            }
         });
     }
 
@@ -335,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void updateMacro(Day day){
+    public void updateMacro(Day day,int i){
         Food food_tmp = food_list.get(day.getFood_name());
         int q,c,p,f,k;
         if(food_tmp==null) return;
@@ -345,16 +389,21 @@ public class MainActivity extends AppCompatActivity {
         f = food_tmp.getFat();
         k = food_tmp.getCal();
 
-        total_carb += q*c;
+        if(i>0){
+            total_carb += q*c;
+            total_prot += q*p;
+            total_fat += q*f;
+            total_cal += q*k;
+        }
+        else{
+            total_carb -= q*c;
+            total_prot -= q*p;
+            total_fat -= q*f;
+            total_cal -= q*k;
+        }
         total_carb_text.setText("carb: "+String.valueOf(total_carb));
-
-        total_prot += q*p;
         total_prot_text.setText("prot: "+String.valueOf(total_prot));
-
-        total_fat += q*f;
         total_fat_text.setText("fat: "+String.valueOf(total_fat));
-
-        total_cal += q*k;
         total_cal_text.setText("cal: "+String.valueOf(total_cal));
 
     }
@@ -367,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
             //Log.d("debug",currentDay+" vs "+user.getDiary().get(key).getDate());
             if(user.getDiary().get(key).getDate().equals(currentDay)) {
                 diary.add(user.getDiary().get(key));
-                updateMacro(user.getDiary().get(key));
+                updateMacro(user.getDiary().get(key),1);
             }
             Log.d("debug",diary.toString());
         }

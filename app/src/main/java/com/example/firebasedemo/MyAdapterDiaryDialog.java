@@ -3,11 +3,14 @@ package com.example.firebasedemo;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +41,7 @@ public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDia
 
     public interface OnItemClickListener {
         void onItemClick(int position, View view);
+        void onQuantityClick(int position, MyViewHolder v);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -74,7 +86,6 @@ public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDia
             holder.fat.setVisibility(View.INVISIBLE);
             holder.cal.setVisibility(View.INVISIBLE);
         }
-
     }
 
     @Override
@@ -92,6 +103,8 @@ public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDia
         TextView set,rep,quant;
         ImageView image;
         ConstraintLayout layout;
+        EditText number;
+
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -105,8 +118,10 @@ public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDia
             image = itemView.findViewById(R.id.imageDialog);
             set = itemView.findViewById(R.id.setDialog);
             rep = itemView.findViewById(R.id.repDialog);
+            number = itemView.findViewById(R.id.numberDialog);
             //quant = itemView.findViewById(R.id.testA);
             layout = itemView.findViewById(R.id.dialog_item_layout);
+            MyViewHolder v = this;
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -119,7 +134,29 @@ public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDia
                     }
                 }
             });
+
+            number.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    //nulla
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    //nulla
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION){
+                        mlistener.onQuantityClick(position,v);
+                    }
+                }
+            });
+
         }
+
     }
 
     public MyAdapterDiaryDialog(Context context, ArrayList<Food> food_list, ArrayList<Exercise> exercise_list, Integer filter) {

@@ -38,6 +38,7 @@ public class Day implements Comparable<Day>{
         super();
         this.date = date;
         this.food_name = food;
+        this.exercise_name = "";
         this.quantity = quantity;
         this.or = 0;
     }
@@ -46,6 +47,7 @@ public class Day implements Comparable<Day>{
         super();
         this.date = date;
         this.exercise_name = exercise;
+        this.food_name = "";
         this.set = set;
         this.rep = rep;
         this.or = 1;
