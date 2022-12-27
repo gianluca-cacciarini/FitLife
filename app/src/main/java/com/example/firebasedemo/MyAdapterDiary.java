@@ -55,7 +55,7 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
         Day day = diary.get(position);
         holder.or = day.getOr();
         if(day.getOr()==0){
-            holder.layout.setBackgroundColor(Color.BLUE);
+            holder.layout.setBackgroundColor(Color.rgb(235, 252, 251));
             Food food = food_list.get(day.getFood_name());
             holder.name.setText(food.getName());
             holder.category.setText(food.getCategory());
@@ -71,14 +71,16 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
 
             holder.set.setVisibility(View.INVISIBLE);
             holder.rep.setVisibility(View.INVISIBLE);
+            holder.cross.setVisibility(View.INVISIBLE);
         }
         else{
-            holder.layout.setBackgroundColor(Color.GREEN);
+            holder.layout.setBackgroundColor(Color.rgb(235, 252, 251));
             Exercise exercise = exercise_list.get(day.getExercise_name());
             holder.name.setText(exercise.getName());
             holder.category.setText(exercise.getCategory());
             Glide.with(context).load(Uri.parse(exercise.getImageurl())).into(holder.image);
             holder.set.setText(String.valueOf(day.getSet()));
+            holder.cross.setVisibility(View.VISIBLE);
             holder.rep.setText(String.valueOf((day.getRep())));
 
             holder.delete.setColorFilter(Color.GRAY);
@@ -101,7 +103,7 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView name,category;
-        TextView carb,prot,fat,cal;
+        TextView carb,prot,fat,cal, cross;
         TextView set,rep,quant;
         ImageView image, delete;
         ConstraintLayout layout;
@@ -123,6 +125,7 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             quant = itemView.findViewById(R.id.testA);
             layout = itemView.findViewById(R.id.diary_item_layout);
             delete = itemView.findViewById(R.id.delete_item_diary);
+            cross = itemView.findViewById(R.id.crossX);
 
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override

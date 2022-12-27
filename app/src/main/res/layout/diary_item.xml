@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:backgroundTint="@color/blue">
+    android:background="#EBFCFB">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/diary_item_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,11 +21,10 @@
             android:id="@+id/delete_item_diary"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/delete"
             android:backgroundTint="@color/red"
             android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,107 +43,137 @@
             android:id="@+id/nameDiary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:text="Name"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/imageDiary"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.146" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/categoryDiary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:text="Category"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/crossX"
             app:layout_constraintStart_toEndOf="@+id/imageDiary"
-            app:layout_constraintTop_toBottomOf="@+id/nameDiary"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/nameDiary" />
 
         <TextView
             android:id="@+id/setDiary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="10dp"
             android:text="SET"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageDiary"
-            app:layout_constraintTop_toBottomOf="@+id/categoryDiary" />
+            app:layout_constraintStart_toEndOf="@+id/imageDiary" />
 
         <TextView
             android:id="@+id/repDiary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="REP"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/setDiary"
-            app:layout_constraintTop_toTopOf="@+id/setDiary" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/crossX" />
 
         <TextView
             android:id="@+id/carbDiary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="10dp"
             android:text="CARB"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageDiary"
-            app:layout_constraintTop_toBottomOf="@+id/categoryDiary" />
+            app:layout_constraintStart_toEndOf="@+id/imageDiary" />
 
         <TextView
             android:id="@+id/protDiary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="10dp"
             android:text="PROT"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/carbDiary"
-            app:layout_constraintTop_toTopOf="@+id/carbDiary" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/carbDiary" />
 
         <TextView
             android:id="@+id/fatDiary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="10dp"
             android:text="FAT"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/protDiary"
-            app:layout_constraintTop_toTopOf="@+id/protDiary" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/protDiary" />
 
         <TextView
             android:id="@+id/calDiary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="10dp"
             android:text="CAL"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/fatDiary"
-            app:layout_constraintTop_toTopOf="@+id/fatDiary" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fatDiary" />
 
         <TextView
             android:id="@+id/testA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:text="G"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/categoryDiary"
-            app:layout_constraintTop_toTopOf="@+id/categoryDiary" />
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/nameDiary"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/testA2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="G"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/testA"
+            tools:layout_editor_absoluteY="5dp" />
+
+        <TextView
+            android:id="@+id/crossX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="x"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/setDiary" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

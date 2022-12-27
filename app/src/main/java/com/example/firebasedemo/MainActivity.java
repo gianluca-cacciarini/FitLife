@@ -423,10 +423,10 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             total_fat -= q*f;
             total_cal -= q*k;
         }
-        total_carb_text.setText("carb: "+String.valueOf(total_carb));
-        total_prot_text.setText("prot: "+String.valueOf(total_prot));
-        total_fat_text.setText("fat: "+String.valueOf(total_fat));
-        total_cal_text.setText("cal: "+String.valueOf(total_cal));
+        total_carb_text.setText(String.valueOf(total_carb));
+        total_prot_text.setText(String.valueOf(total_prot));
+        total_fat_text.setText(String.valueOf(total_fat));
+        total_cal_text.setText(String.valueOf(total_cal));
 
     }
 
