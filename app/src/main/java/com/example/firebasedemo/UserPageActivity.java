@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +42,19 @@ public class UserPageActivity extends AppCompatActivity {
     private User user;
     private TextView full_name;
     private String string;
+
+    @Override
+    public void onBackPressed() {
+        //Intent i = new Intent();
+        Log.d("AddExercisePage","onBackPressed");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 0);
+        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

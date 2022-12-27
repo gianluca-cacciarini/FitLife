@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -92,6 +93,19 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private ArrayList<Exercise> diary_exercise_list = new ArrayList<Exercise>();
 
     private Button calendar;
+
+    @Override
+    public void onBackPressed() {
+        //Intent i = new Intent();
+        Log.d("AddExercisePage","onBackPressed");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 0);
+        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {

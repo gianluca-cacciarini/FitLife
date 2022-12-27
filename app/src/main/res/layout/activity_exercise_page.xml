@@ -43,6 +43,99 @@
         android:textColor="@color/black"
         android:textColorHint="@color/black" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/exercisefilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="@color/blue"
+        android:tint="@color/green"
+        app:layout_constraintBottom_toBottomOf="@+id/navigation_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/filter"
+        app:borderWidth="0dp"/>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/exercisefiltertypeA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/green"
+        android:text="remove"
+        android:visibility="invisible"
+        app:icon="@drawable/cross"
+        app:layout_constraintBottom_toTopOf="@+id/exercisefilter"
+        app:layout_constraintEnd_toEndOf="@+id/exercisefiltertypeE"
+        app:layout_constraintStart_toStartOf="@+id/exercisefiltertypeE" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/exercisefiltertypeB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/green"
+        android:text="chest"
+        android:visibility="invisible"
+        app:icon="@drawable/torso"
+        app:layout_constraintBottom_toTopOf="@+id/exercisefiltertypeC"
+        app:layout_constraintStart_toStartOf="@+id/exercisefiltertypeC" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/exercisefiltertypeD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/green"
+        android:text="back"
+        android:visibility="invisible"
+        app:icon="@drawable/back"
+        app:layout_constraintBottom_toTopOf="@+id/exercisefiltertypeF"
+        app:layout_constraintEnd_toEndOf="@+id/exercisefiltertypeF" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/exercisefiltertypeE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/green"
+        android:text="arms"
+        android:visibility="invisible"
+        app:icon="@drawable/arm"
+        app:layout_constraintBottom_toTopOf="@+id/exercisefiltertypeD"
+        app:layout_constraintEnd_toEndOf="@+id/exercisefiltertypeD"
+        app:layout_constraintHorizontal_bias="0.455"
+        app:layout_constraintStart_toStartOf="@+id/exercisefiltertypeB" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/exercisefiltertypeC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/green"
+        android:text="legs"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        app:icon="@drawable/leg"
+        app:layout_constraintBottom_toTopOf="@+id/exercisefiltertypeA"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/exercisefiltertypeF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/green"
+        android:text="abs"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        app:icon="@drawable/abs"
+        app:layout_constraintBottom_toBottomOf="@+id/exercisefiltertypeC"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

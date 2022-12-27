@@ -15,6 +15,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -52,6 +53,19 @@ public class PedometerPageActivity extends AppCompatActivity implements SensorEv
     private int increment=0;
     private int prev=0;
     private String currentDay, lastDay;
+
+    @Override
+    public void onBackPressed() {
+        //Intent i = new Intent();
+        Log.d("AddExercisePage","onBackPressed");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 0);
+        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+    }
 
     @Override
     protected void onResume() {

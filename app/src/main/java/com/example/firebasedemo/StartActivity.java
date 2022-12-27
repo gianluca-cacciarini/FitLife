@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +31,19 @@ public class StartActivity extends AppCompatActivity {
     private GoogleSignInClient gsc;
 
     private FirebaseAuth firebaseAuth;
+
+    @Override
+    public void onBackPressed() {
+        //Intent i = new Intent();
+        Log.d("AddExercisePage","onBackPressed");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 0);
+        startActivity(new Intent(getApplicationContext(),StartActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

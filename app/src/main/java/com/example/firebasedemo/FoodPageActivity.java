@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -53,9 +54,22 @@ public class FoodPageActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
 
     private FloatingActionButton filter;
-    private ExtendedFloatingActionButton filterA,filterB,filterC;
+    private ExtendedFloatingActionButton filterA,filterB,filterC,filterD,filterE,filterF;
     private Animation filterOpen, filterClose;
     private Boolean isOpen = false;
+
+    @Override
+    public void onBackPressed() {
+        //Intent i = new Intent();
+        Log.d("AddExercisePage","onBackPressed");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 0);
+        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +96,9 @@ public class FoodPageActivity extends AppCompatActivity {
         filterA = findViewById(R.id.foodfiltertypeA);
         filterB = findViewById(R.id.foodfiltertypeB);
         filterC = findViewById(R.id.foodfiltertypeC);
+        filterD = findViewById(R.id.foodfiltertypeD);
+        filterE = findViewById(R.id.foodfiltertypeE);
+        filterF = findViewById(R.id.foodfiltertypeF);
 
         filterA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,20 +113,50 @@ public class FoodPageActivity extends AppCompatActivity {
         filterB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(FoodPageActivity.this, "Filter B", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FoodPageActivity.this, "fish", Toast.LENGTH_SHORT).show();
                 food_list = new ArrayList<Food>();
                 food_name_list = new ArrayList<String>();
-                insertFilteredFoodList("catB");
+                insertFilteredFoodList("fish");
             }
         });
 
         filterC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(FoodPageActivity.this, "Filter C", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FoodPageActivity.this, "meat", Toast.LENGTH_SHORT).show();
                 food_list = new ArrayList<Food>();
                 food_name_list = new ArrayList<String>();
-                insertFilteredFoodList("catC");
+                insertFilteredFoodList("meat");
+            }
+        });
+
+        filterD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FoodPageActivity.this, "cereal", Toast.LENGTH_SHORT).show();
+                food_list = new ArrayList<Food>();
+                food_name_list = new ArrayList<String>();
+                insertFilteredFoodList("cereal");
+            }
+        });
+
+        filterE.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FoodPageActivity.this, "frut/veg", Toast.LENGTH_SHORT).show();
+                food_list = new ArrayList<Food>();
+                food_name_list = new ArrayList<String>();
+                insertFilteredFoodList("frut/veg");
+            }
+        });
+
+        filterF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FoodPageActivity.this, "other", Toast.LENGTH_SHORT).show();
+                food_list = new ArrayList<Food>();
+                food_name_list = new ArrayList<String>();
+                insertFilteredFoodList("other");
             }
         });
 
@@ -183,18 +230,30 @@ public class FoodPageActivity extends AppCompatActivity {
             filterA.startAnimation(filterClose);
             filterB.startAnimation(filterClose);
             filterC.startAnimation(filterClose);
+            filterD.startAnimation(filterClose);
+            filterE.startAnimation(filterClose);
+            filterF.startAnimation(filterClose);
             filterA.setClickable(false);
             filterB.setClickable(false);
             filterC.setClickable(false);
+            filterD.setClickable(false);
+            filterE.setClickable(false);
+            filterF.setClickable(false);
             isOpen=false;
         }
         else{
             filterA.startAnimation(filterOpen);
             filterB.startAnimation(filterOpen);
             filterC.startAnimation(filterOpen);
+            filterD.startAnimation(filterOpen);
+            filterE.startAnimation(filterOpen);
+            filterF.startAnimation(filterOpen);
             filterA.setClickable(true);
             filterB.setClickable(true);
             filterC.setClickable(true);
+            filterD.setClickable(true);
+            filterE.setClickable(true);
+            filterF.setClickable(true);
             isOpen=true;
         }
     }

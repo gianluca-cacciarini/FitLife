@@ -63,39 +63,81 @@
         android:id="@+id/foodfiltertypeA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/green"
         android:text="remove"
         android:visibility="invisible"
         app:icon="@drawable/cross"
-        app:layout_constraintBottom_toBottomOf="@+id/foodfilter"
-        app:layout_constraintEnd_toStartOf="@+id/foodfilter" />
+        app:layout_constraintBottom_toTopOf="@+id/foodfilter"
+        app:layout_constraintEnd_toEndOf="@+id/foodfiltertypeE"
+        app:layout_constraintStart_toStartOf="@+id/foodfiltertypeE" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/foodfiltertypeB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/green"
         android:text="fish"
+        android:visibility="invisible"
         app:icon="@drawable/fish"
         app:layout_constraintBottom_toTopOf="@+id/foodfiltertypeC"
-        app:layout_constraintEnd_toEndOf="@+id/foodfilter"
-        android:visibility="invisible" />
+        app:layout_constraintStart_toStartOf="@+id/foodfiltertypeC" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/foodfiltertypeD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/green"
+        android:text="cereal"
+        android:visibility="invisible"
+        app:icon="@drawable/cereal"
+        app:layout_constraintBottom_toTopOf="@+id/foodfiltertypeF"
+        app:layout_constraintEnd_toEndOf="@+id/foodfiltertypeF" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/foodfiltertypeE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/green"
+        android:text="fruit/veg"
+        android:visibility="invisible"
+        app:icon="@drawable/fruit"
+        app:layout_constraintBottom_toTopOf="@+id/foodfiltertypeD"
+        app:layout_constraintEnd_toEndOf="@+id/foodfiltertypeD"
+        app:layout_constraintHorizontal_bias="0.455"
+        app:layout_constraintStart_toStartOf="@+id/foodfiltertypeB" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/foodfiltertypeC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/green"
         android:text="meat"
         android:textAlignment="center"
+        android:visibility="invisible"
         app:icon="@drawable/meat"
-        app:layout_constraintBottom_toTopOf="@+id/foodfilter"
-        app:layout_constraintEnd_toEndOf="@+id/foodfilter"
-        android:visibility="invisible" />
+        app:layout_constraintBottom_toTopOf="@+id/foodfiltertypeA"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/foodfiltertypeF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/green"
+        android:text="other"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        app:icon="@drawable/cookie"
+        app:layout_constraintBottom_toBottomOf="@+id/foodfiltertypeC"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
