@@ -156,12 +156,12 @@
             android:id="@+id/testA2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:text="G"
+            android:layout_marginTop="8dp"
+            android:text="g"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/testA"
-            tools:layout_editor_absoluteY="5dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/crossX"
