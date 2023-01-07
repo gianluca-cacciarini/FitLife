@@ -143,10 +143,10 @@ public class FoodPageActivity extends AppCompatActivity {
         filterE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(FoodPageActivity.this, "frut/veg", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FoodPageActivity.this, "fruit&veg", Toast.LENGTH_SHORT).show();
                 food_list = new ArrayList<Food>();
                 food_name_list = new ArrayList<String>();
-                insertFilteredFoodList("frut/veg");
+                insertFilteredFoodList("fruit&veg");
             }
         });
 
