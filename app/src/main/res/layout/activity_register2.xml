@@ -40,7 +40,7 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="81dp"
+                android:layout_width="89dp"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/immagine8" />
 
@@ -79,6 +79,8 @@
             android:hint="Enter Your Height"
             android:inputType="number"
             android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             android:textSize="18sp" />
 
         <TextView
