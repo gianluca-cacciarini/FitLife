@@ -101,17 +101,17 @@ public class ExercisePageActivity extends AppCompatActivity {
                 Toast.makeText(ExercisePageActivity.this, "fish", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("fish");
+                insertFilteredExerciseList("chest");
             }
         });
 
         filterC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ExercisePageActivity.this, "meat", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ExercisePageActivity.this, "meat", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("meat");
+                insertFilteredExerciseList("legs");
             }
         });
 
@@ -121,7 +121,7 @@ public class ExercisePageActivity extends AppCompatActivity {
                 Toast.makeText(ExercisePageActivity.this, "cereal", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("cereal");
+                insertFilteredExerciseList("back");
             }
         });
 
@@ -131,7 +131,7 @@ public class ExercisePageActivity extends AppCompatActivity {
                 Toast.makeText(ExercisePageActivity.this, "frut/veg", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("frut/veg");
+                insertFilteredExerciseList("arms");
             }
         });
 
@@ -141,7 +141,7 @@ public class ExercisePageActivity extends AppCompatActivity {
                 Toast.makeText(ExercisePageActivity.this, "other", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("other");
+                insertFilteredExerciseList("abs");
             }
         });
 

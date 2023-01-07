@@ -221,7 +221,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/navigation_menu"
         android:background="@color/grey"
-        app:itemIconTint="@color/red"
+        app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
