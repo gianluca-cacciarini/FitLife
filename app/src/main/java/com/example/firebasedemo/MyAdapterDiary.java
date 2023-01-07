@@ -58,11 +58,12 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             holder.layout.setBackgroundColor(Color.rgb(235, 252, 251));
             Food food = food_list.get(day.getFood_name());
             holder.name.setText(food.getName());
+            holder.g.setVisibility(View.VISIBLE);
             holder.category.setText(food.getCategory());
-            holder.carb.setText(String.valueOf(food.getCarb()));
-            holder.prot.setText(String.valueOf(food.getProt()));
-            holder.fat.setText(String.valueOf(food.getFat()));
-            holder.cal.setText(String.valueOf(food.getCal()));
+            holder.carb.setText("C: " + String.valueOf(food.getCarb()));
+            holder.prot.setText("P: " +String.valueOf(food.getProt()));
+            holder.fat.setText("F: " +String.valueOf(food.getFat()));
+            holder.cal.setText("cal: " +String.valueOf(food.getCal()));
             Glide.with(context).load(Uri.parse(food.getImageurl())).into(holder.image);
             holder.quant.setText(String.valueOf(day.getQuantity()));
             holder.delete.setColorFilter(Color.GRAY);
@@ -87,6 +88,7 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             holder.delete.setVisibility(View.VISIBLE);
 
             holder.quant.setVisibility(View.INVISIBLE);
+            holder.g.setVisibility(View.INVISIBLE);
             holder.carb.setVisibility(View.INVISIBLE);
             holder.prot.setVisibility(View.INVISIBLE);
             holder.fat.setVisibility(View.INVISIBLE);
@@ -103,7 +105,7 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView name,category;
-        TextView carb,prot,fat,cal, cross;
+        TextView carb,prot,fat,cal, cross, g;
         TextView set,rep,quant;
         ImageView image, delete;
         ConstraintLayout layout;
@@ -126,6 +128,7 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
             layout = itemView.findViewById(R.id.diary_item_layout);
             delete = itemView.findViewById(R.id.delete_item_diary);
             cross = itemView.findViewById(R.id.crossX);
+            g = itemView.findViewById(R.id.testA2);
 
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
