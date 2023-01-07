@@ -34,6 +34,7 @@
                 android:minHeight="48dp"
                 android:onClick="onCheckboxClicked"
                 android:text="Male"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -52,6 +53,7 @@
                 android:minHeight="48dp"
                 android:onClick="onCheckboxClicked"
                 android:text="Female"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -94,7 +96,6 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/edittext_background"
-
             android:ems="10"
             android:hint="Enter Your Weight"
             android:inputType="number"
