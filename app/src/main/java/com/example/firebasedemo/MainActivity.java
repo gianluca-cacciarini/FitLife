@@ -47,7 +47,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -306,21 +305,35 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
             @Override
             public void onQuantityClick(int position, MyAdapterDiaryDialog.MyViewHolder v) {
-                Toast.makeText(MainActivity.this, v.name.getText().toString()+" "+v.number.getText().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, v.name.getText().toString()+" "+v.quantityNumber.getText().toString(), Toast.LENGTH_SHORT).show();
                 if(dialog_filter==0){
                     Food f = dialog_food_list.get(position);
-                    if(v.number.getText().toString().equals("") || v.number.getText().toString().equals("0")) return;
-                    Day new_d = new Day(currentDay,f.getName(),Integer.parseInt(v.number.getText().toString()));
+                    if(v.quantityNumber.getText().toString().equals("") || v.quantityNumber.getText().toString().equals("0")) return;
+                    Day new_d = new Day(currentDay,f.getName(),Integer.parseInt(v.quantityNumber.getText().toString()));
                     user.addDay(new_d);
                     updateUser();
                 }
-                else{
-                    Exercise e = dialog_exercise_list.get(position);
-                    if(v.number.getText().toString().equals("") || v.number.getText().toString().equals("0")) return;
-                    Day new_d = new Day(currentDay,e.getName(),1,2);
-                    user.addDay(new_d);
-                    updateUser();
-                }
+            }
+
+            @Override
+            public void onSetClick(int position, MyAdapterDiaryDialog.MyViewHolder v) {
+                Toast.makeText(MainActivity.this, v.name.getText().toString()+" "+v.quantityNumber.getText().toString(), Toast.LENGTH_SHORT).show();
+                Exercise e = dialog_exercise_list.get(position);
+                if(v.setNumber.getText().toString().equals("") || v.repNumber.getText().toString().equals("")) return;
+                Day new_d = new Day(currentDay,e.getName(),Integer.parseInt(v.setNumber.getText().toString()),Integer.parseInt(v.repNumber.getText().toString()));
+                user.addDay(new_d);
+                updateUser();
+
+            }
+
+            @Override
+            public void onRepClick(int position, MyAdapterDiaryDialog.MyViewHolder v) {
+                Toast.makeText(MainActivity.this, v.name.getText().toString()+" "+v.quantityNumber.getText().toString(), Toast.LENGTH_SHORT).show();
+                Exercise e = dialog_exercise_list.get(position);
+                if(v.setNumber.getText().toString().equals("") || v.repNumber.getText().toString().equals("")) return;
+                Day new_d = new Day(currentDay,e.getName(),Integer.parseInt(v.setNumber.getText().toString()),Integer.parseInt(v.repNumber.getText().toString()));
+                user.addDay(new_d);
+                updateUser();
             }
 
         });
@@ -343,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 diary_exercise_list.add(exercise_list.get(exercisename));
             }
         }
-        Collections.sort(diary_food_list);
+        Collections.sort(diary_exercise_list);
 
         myAdapterDiary = new MyAdapterDiary(getApplicationContext(),food_list,exercise_list,diary);
         recyclerViewDiary.setAdapter(myAdapterDiary);
