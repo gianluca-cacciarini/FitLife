@@ -30,9 +30,11 @@
             android:id="@+id/nameFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:text="Name"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -44,9 +46,12 @@
             android:id="@+id/categoryFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
             android:text="Category"
             android:textColor="@color/black"
             android:textSize="16sp"
+            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -58,44 +63,49 @@
             android:id="@+id/carbFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="10dp"
             android:text="CARB"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageFood"
-            app:layout_constraintTop_toBottomOf="@+id/categoryFood" />
-
-        <TextView
-            android:id="@+id/protFood"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PROT"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/carbFood"
-            app:layout_constraintTop_toTopOf="@+id/carbFood" />
+            app:layout_constraintStart_toEndOf="@+id/imageFood" />
 
         <TextView
             android:id="@+id/fatFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="10dp"
             android:text="FAT"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/protFood"
-            app:layout_constraintTop_toTopOf="@+id/protFood" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/protFood" />
 
         <TextView
             android:id="@+id/calFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="10dp"
             android:text="CAL"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/fatFood"
-            app:layout_constraintTop_toTopOf="@+id/fatFood" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fatFood" />
+
+        <TextView
+            android:id="@+id/protFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="10dp"
+            android:text="PROT"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/carbFood" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

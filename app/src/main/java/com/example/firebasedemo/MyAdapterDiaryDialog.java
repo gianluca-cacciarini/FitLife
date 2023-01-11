@@ -54,12 +54,12 @@ public class MyAdapterDiaryDialog extends RecyclerView.Adapter<MyAdapterDiaryDia
         if(this.filter==0){
             holder.layout.setBackgroundColor(Color.GRAY);
             Food food = this.food_list.get(position);
-            holder.name.setText(food.getName());
-            holder.category.setText(food.getCategory());
-            holder.carb.setText(String.valueOf(food.getCarb()));
-            holder.prot.setText(String.valueOf(food.getProt()));
-            holder.fat.setText(String.valueOf(food.getFat()));
-            holder.cal.setText(String.valueOf(food.getCal()));
+            holder.name.setText(food.getName().substring(0, 1).toUpperCase() + food.getName().substring(1));
+            holder.category.setText(food.getCategory().substring(0, 1).toUpperCase() + food.getCategory().substring(1));
+            holder.carb.setText("C: " + String.valueOf(food.getCarb()));
+            holder.prot.setText("P: " +String.valueOf(food.getProt()));
+            holder.fat.setText("F: " +String.valueOf(food.getFat()));
+            holder.cal.setText("cal: " +String.valueOf(food.getCal()));
             Glide.with(context).load(Uri.parse(food.getImageurl())).into(holder.image);
 
             holder.setText.setVisibility(View.INVISIBLE);

@@ -101,7 +101,7 @@ public class ExercisePageActivity extends AppCompatActivity {
                 //Toast.makeText(ExercisePageActivity.this, "fish", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("chest");
+                insertFilteredExerciseList("Chest");
             }
         });
 
@@ -111,7 +111,7 @@ public class ExercisePageActivity extends AppCompatActivity {
                 //Toast.makeText(ExercisePageActivity.this, "meat", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("legs");
+                insertFilteredExerciseList("Legs");
             }
         });
 
@@ -121,7 +121,7 @@ public class ExercisePageActivity extends AppCompatActivity {
                 //Toast.makeText(ExercisePageActivity.this, "cereal", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("back");
+                insertFilteredExerciseList("Back");
             }
         });
 
@@ -131,7 +131,7 @@ public class ExercisePageActivity extends AppCompatActivity {
                 //Toast.makeText(ExercisePageActivity.this, "frut/veg", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("arms");
+                insertFilteredExerciseList("Arms");
             }
         });
 
@@ -141,7 +141,7 @@ public class ExercisePageActivity extends AppCompatActivity {
                 //Toast.makeText(ExercisePageActivity.this, "other", Toast.LENGTH_SHORT).show();
                 exercise_list = new ArrayList<Exercise>();
                 exercise_name_list = new ArrayList<String>();
-                insertFilteredExerciseList("shoulders");
+                insertFilteredExerciseList("Shoulders");
             }
         });
 

@@ -31,12 +31,12 @@ public class MyAdapterFood extends RecyclerView.Adapter<MyAdapterFood.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyAdapterFood.MyViewHolder holder, int position) {
         Food food = food_list.get(position);
-        holder.name.setText(food.getName());
-        holder.category.setText(food.getCategory());
-        holder.carb.setText(String.valueOf(food.getCarb()));
-        holder.prot.setText(String.valueOf(food.getProt()));
-        holder.fat.setText(String.valueOf(food.getFat()));
-        holder.cal.setText(String.valueOf(food.getCal()));
+        holder.name.setText(food.getName().substring(0, 1).toUpperCase() + food.getName().substring(1));
+        holder.category.setText(food.getCategory().substring(0, 1).toUpperCase() + food.getCategory().substring(1));
+        holder.carb.setText("C: " + String.valueOf(food.getCarb()));
+        holder.prot.setText("P: " +String.valueOf(food.getProt()));
+        holder.fat.setText("F: " +String.valueOf(food.getFat()));
+        holder.cal.setText("cal: " +String.valueOf(food.getCal()));
         Glide.with(context).load(Uri.parse(food.getImageurl())).into(holder.image);
         //holder.image.setImageURI(Uri.parse(food.getImageurl()));
         //Toast.makeText(context, "myadapter "+food.getName(), Toast.LENGTH_SHORT).show();
@@ -62,7 +62,6 @@ public class MyAdapterFood extends RecyclerView.Adapter<MyAdapterFood.MyViewHold
             fat = itemView.findViewById(R.id.fatFood);
             cal = itemView.findViewById(R.id.calFood);
             image = itemView.findViewById(R.id.imageFood);
-
 
         }
     }

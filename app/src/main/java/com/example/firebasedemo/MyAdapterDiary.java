@@ -57,13 +57,17 @@ public class MyAdapterDiary extends RecyclerView.Adapter<MyAdapterDiary.MyViewHo
         if(day.getOr()==0){
             holder.layout.setBackgroundColor(Color.rgb(235, 252, 251));
             Food food = food_list.get(day.getFood_name());
-            holder.name.setText(food.getName());
+            holder.name.setText(food.getName().substring(0, 1).toUpperCase() + food.getName().substring(1));
             holder.g.setVisibility(View.VISIBLE);
-            holder.category.setText(food.getCategory());
-            holder.carb.setText("C: " + String.valueOf(food.getCarb()));
-            holder.prot.setText("P: " +String.valueOf(food.getProt()));
-            holder.fat.setText("F: " +String.valueOf(food.getFat()));
-            holder.cal.setText("cal: " +String.valueOf(food.getCal()));
+            holder.category.setText(food.getCategory().substring(0, 1).toUpperCase() + food.getCategory().substring(1));
+            int i1 = (food.getCarb()*day.getQuantity())/100;
+            int i2 = (food.getProt()*day.getQuantity())/100;
+            int i3 = (food.getFat()*day.getQuantity())/100;
+            int i4 = (food.getCal()*day.getQuantity())/100;
+            holder.carb.setText("C: " + String.valueOf(i1));
+            holder.prot.setText("P: " +String.valueOf(i2));
+            holder.fat.setText("F: " +String.valueOf(i3));
+            holder.cal.setText("cal: " +String.valueOf(i4));
             Glide.with(context).load(Uri.parse(food.getImageurl())).into(holder.image);
             holder.quant.setText(String.valueOf(day.getQuantity()));
             holder.delete.setColorFilter(Color.GRAY);
