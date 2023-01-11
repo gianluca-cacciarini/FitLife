@@ -129,7 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:backgroundTint="@color/celeste"
-        android:text="abs"
+        android:text="shoulders"
         android:textAlignment="center"
         android:visibility="invisible"
         app:icon="@drawable/abs"
